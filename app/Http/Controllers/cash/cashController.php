@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\cash;
+
+use App\Http\Controllers\commonController;
 
 use Request;
 
@@ -17,7 +19,7 @@ use App\Model\cash\view_cash_constant_list_model;
 
 use App\Model\slack\slack_push_model;
 
-class cashController extends Controller
+class cashController extends commonController
 {
     /*
      * 新規登録画面 or 定期的に入れるcashデータを登録する
@@ -87,8 +89,8 @@ class cashController extends Controller
             $msg .= "金額　：" . number_format((int)$request['price']) . PHP_EOL;
             $msg .= "科目　；" . $tag['kamoku']      . PHP_EOL;
             $msg .= "概要　：" . $request['comment'] . PHP_EOL;
-            $slack_push_model = new slack_push_model();
-            $slack_push_model->push_msg($msg);
+
+            $this->common_model()->slack_push_msg($msg);
 
             return redirect(url('/cash/list') . '?id=' . $cashId);
         } else {
@@ -148,8 +150,8 @@ class cashController extends Controller
         $msg .= "金額　：" . $data['price']   . PHP_EOL;
         $msg .= "科目　；" . $tag['kamoku']  . PHP_EOL;
         $msg .= "概要　：" . $data['comment'] . PHP_EOL;
-        $slack_push_model = new slack_push_model();
-        $slack_push_model->push_msg($msg);
+        
+        $this->common_model()->slack_push_msg($msg);
 
         return $data;
     }

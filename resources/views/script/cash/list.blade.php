@@ -22,8 +22,8 @@
     <ul class="list-group list-group-flush">
         <li class="list-group-item list-group-item-success">残高<span class="badge badge-success float-right">{{ number_format($view['sum_balance']) }}</span></li>
         <li class="list-group-item list-group-item-success">Devit 使用額<span class="badge badge-success float-right">{{ number_format($view['devit_pay']) }}</span></li>
-        <li class="list-group-item list-group-item-danger">今月支出<span class="badge badge-danger float-right">まだやねん</span></li>
-        <li class="list-group-item list-group-item-primary">今月利益<span class="badge badge-primary float-right">まだやねん</span></li>
+    <li class="list-group-item list-group-item-danger">今月支出<span class="badge badge-danger float-right">{{ number_format($view['sum_balance_target_month']['expence']) }}</span></li>
+        <li class="list-group-item list-group-item-primary">今月利益<span class="badge badge-primary float-right">{{ number_format($view['sum_balance_target_month']['profit']) }}</span></li>
     </ul>
 
     <hr style="height: 10px;"></hr>
@@ -58,7 +58,7 @@
     <hr style="height: 10px;"></hr>
 
     <div class="table-responsive">
-        <table class="table table-sm table-hover" style="font-size: 11px;min-width: 680px;">
+        <table class="table table-sm table-hover table_style">
             <thead>
             <tr>
                 <th scope="col" style="width: 75px;">名前</th>
@@ -86,9 +86,38 @@
         </table>
     </div>
 
+    <div class="table-responsive">
+        <table class="table table-sm table-hover table_style">
+            <thead>
+                <tr>
+                    <th scope="col" style="width: 75px;"></th>
+                    @foreach ($view['sum_kamoku_month_list']['kamoku_list'] as $kamoku_name => $val)
+                        <th scope="col" style="width: 80px;">{{ $kamoku_name }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                
+                    @foreach (all_year_month() as $month => $val)
+                        <tr>
+                            <th>{{ $month }}</th>
+                            @foreach ($view['sum_kamoku_month_list']['kamoku_list'] as $kamoku_name => $val)
+                                <td>{{ number_format($view['sum_kamoku_month_list'][$kamoku_name][$month]) }}</td>
+                            @endforeach 
+                        </tr>
+                    @endforeach
+                
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 <style>
+    .table_style {
+        font-size: 11px;
+        min-width: 680px;
+    }
     .circle {
         width: 10px;
         height: 10px;

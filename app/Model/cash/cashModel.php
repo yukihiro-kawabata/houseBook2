@@ -42,6 +42,41 @@ class cashModel extends Model
         return $data;
     }
 
+    /**
+     * 年月ごとに集計科目の金額を取得する
+     */
+    public function sum_kamoku_list_all()
+    {
+        $re  = [];
+        $tmp = [];
+        $kamoku = [];
+
+        $cashDao = new cash();
+        // 集計科目をkeyに年月ごとに金額をまとめる
+        foreach ($cashDao->fetch_kamoku_sum_price_all() as $num => $data) {
+            if (!array_key_exists($data->kamoku_sum, $tmp)) $tmp[$data->kamoku_sum] = [];
+            // SQLでうまく集計できなかったので、集計科目・年月ごとに集計する
+            if (!array_key_exists($data->month, $tmp[$data->kamoku_sum])) {
+                $tmp[$data->kamoku_sum][$data->month] = (int)$data->amount;
+            } else {
+                $tmp[$data->kamoku_sum][$data->month] = $tmp[$data->kamoku_sum][$data->month] + $data->amount;
+            }
+
+            $kamoku[$data->kamoku_sum] = '';
+        }
+        $re = $tmp; // 良い方法が思いつかなかったので不格好。集計の集計をするのでこの形
+        $re['kamoku_list'] = $kamoku;
+
+        // 今月から1年前までの配列を用意する（DBで取得するとデータがない月は上記の処理で年月なしで来るので補填するのが目的）
+        foreach ($tmp as $sum_kamoku => $data) {
+            foreach (all_year_month() as $month => $val) {
+                if (!array_key_exists($month, $re[$sum_kamoku])) $re[$sum_kamoku][$month] = 0;
+            }
+        }
+
+        return $re;
+    }
+
     /*
      * 現在の残高を取得する
      * @return int $re 残高
@@ -53,11 +88,30 @@ class cashModel extends Model
         $cashDao = new cash();
         $sum_balance = $cashDao->sum_balance();
         foreach ($sum_balance as $num => $balance) {
-            $re = $re + $balance->balance; // クエリで支出はマイナスで取得するようにしたので単純に足し算すればOK
+            $re += $balance->balance; // クエリで支出はマイナスで取得するようにしたので単純に足し算すればOK
         }
         return $re;
     }
-    
+
+    /**
+     * 現在の残高を取得する
+     * @param string|date $date 指定年月
+     * @return int $re 残高
+     */
+    public function sum_balance_this_month($date) : array
+    {
+        $re= ['income' => 0, 'expence' => 0, 'profit' => 0];
+
+        $cashDao = new cash();
+        $sum_balance = $cashDao->sum_balance(date('Y-m-01', strtotime($date)), date('Y-m-31', strtotime($date)));
+        foreach ($sum_balance as $num => $data) {
+            if ($data->amount_flg === 1) $re['income']  = $data->balance;
+            if ($data->amount_flg === 2) $re['expence'] = $data->balance;
+        }
+        $re['profit'] = $re['income'] + $re['expence']; // 支出はマイナスがついているので演算処理は加算でOK
+        return $re;
+    }
+        
     /*
      * 現在のデビットカードの使用金額を取得する
      * @param int $date yyyymm形式の年月
@@ -98,7 +152,8 @@ class cashModel extends Model
         $year  = preg_replace('/\d{2}$/', '', $date);
         $month = (int)preg_replace('/^\d{4}/', '', $date);
 
-        $from = "$year-" . sprintf('%02d', $month - 1);
+        // $from = "$year-" . sprintf('%02d', $month - 1); // 2ヶ月分表示しても閲覧していないので一時的にコメントアウト
+        $from = "$year-" . sprintf('%02d', $month);
         $to   = "$year-" . sprintf('%02d', $month);
 
         $cashDao = new cash();

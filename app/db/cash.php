@@ -24,8 +24,8 @@ class cash extends Model
         return DB::select($sql);
     }
 
-    // list doc
-    public function fetch_kamoku_sum_price($date, $user_name)
+    // 集計科目ごとの集計
+    public function fetch_kamoku_sum_price($date, $user_name = null)
     {
         if (empty($date)) $date = date('Y-m');
 
@@ -41,8 +41,30 @@ class cash extends Model
         return DB::select($sql);
     }
 
-    public function sum_balance()
+    // 年月・集計科目ごとに金額を集計する
+    public function fetch_kamoku_sum_price_all()
     {
+        if (empty($date)) $date = date('Y-m');
+
+        $sql = "";
+        $sql .= " SELECT kamoku_mst.kamoku_sum, kamoku_mst.amount_flg, ";
+        $sql .= "        DATE_FORMAT(cash.date, '%Y%m') AS month, ";
+        $sql .= "        sum(cash.price) AS amount ";
+        $sql .= " FROM `cash`";
+        $sql .= " INNER JOIN kamoku_mst ON cash.kamoku_id = kamoku_mst.kamoku_id ";
+        $sql .= " WHERE cash.delete_flg = 0 ";
+        $sql .= " GROUP BY kamoku_mst.kamoku_sum, kamoku_mst.amount_flg, cash.date ";
+        $sql .= " ORDER BY cash.date DESC, kamoku_mst.amount_flg DESC ";
+
+        return DB::select($sql);
+    }
+
+    // 残高を取得する
+    // 今までの残高を取得するなら、$from = 2020-02-01 にする(システムスタートが2020-02-01だから)
+    public function sum_balance($from = '2020-02-01', $to = null)
+    {
+        if (is_null($to)) $to = date('Y-m-d');
+
         $sql = "";
         $sql .= " SELECT ";
         $sql .= " kamoku_mst.amount_flg, ";
@@ -54,7 +76,8 @@ class cash extends Model
         $sql .= " ) AS balance ";
         $sql .= " FROM `cash` ";
         $sql .= " INNER JOIN kamoku_mst ON cash.kamoku_id = kamoku_mst.kamoku_id ";
-        $sql .= " WHERE cash.delete_flg = 0 AND cash.date >= '2020-02-01' "; // system start was 2020-02
+        $sql .= " WHERE cash.delete_flg = 0 ";
+        $sql .= "     AND cash.date BETWEEN '$from' AND '$to' ";
         $sql .= "     AND cash.name != 'yukihiro' AND cash.name != 'kabigon' ";
         $sql .= " GROUP BY kamoku_mst.amount_flg ";
 

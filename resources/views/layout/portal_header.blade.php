@@ -45,6 +45,7 @@
                         <li><a href="{{ url('/cash/list') }}" style="color:#fff;">一覧ページ</a></li>
                         <li><a href="{{ url('/cash/index') . '?constant=true' }}" style="color:#fff;">自動登録設定</a></li>
                         <li><a href="{{ url('/cash/constant/list') }}" style="color:#fff;">自動登録一覧</a></li>
+                        <li><a href="{{ url('/kamoku/list') }}" style="color:#fff;">科目一覧</a></li>
                     </ul>
                 </div>
             </div>
