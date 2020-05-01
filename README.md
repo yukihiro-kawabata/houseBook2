@@ -22,8 +22,8 @@ If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Lar
 $ composer install
 $ npm install
 
-# Vue Routerが無ければ実行
-$ npm install --save vue-router
+# Vue Routerが無ければ実行（現在使ってないので不要 2020.05.01）
+$ #### npm install --save vue-router
 
 $ chmod -R 777 storage
 $ chmod -R 777 bootstrap/cache
