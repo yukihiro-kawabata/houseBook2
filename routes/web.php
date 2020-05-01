@@ -32,6 +32,9 @@ Route::get('/cash/constant/list', 'cash\cashController@constantListAction');
 // delete of constant cash data
 Route::get('/cash/constant/deleteexecute', 'cash\cashController@constantDeleteexecute');
 
+// api of cash list
+Route::get('/api/cash/sum_kamoku_graph', 'api\apiController@fetch_cash_sum_kamoku_graph');
+
 // kamoku list
 Route::get('/kamoku/list', 'kamoku\kamokuController@listAction');
 // regist of kamoku master

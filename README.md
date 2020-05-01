@@ -20,12 +20,20 @@ If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Lar
 
 ```
 $ composer install
+$ npm install
+
+# Vue Routerが無ければ実行
+$ npm install --save vue-router
 
 $ chmod -R 777 storage
 $ chmod -R 777 bootstrap/cache
 
+$ php artisan ui vue
 $ php artisan migrate
 $ php artisan db:seed # テストデータ挿入
+
+# ビルド実行
+$ npm run dev
 ```
 
 ## License

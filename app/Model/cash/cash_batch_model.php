@@ -36,8 +36,8 @@ class cash_batch_model extends cashModel
                 $post[$key] = $data->{$key};
             }
             $post['date'] = date('Y-m-d');
-            sleep(1000); // slack側にスパムだと認定されないように
-            $api_model->post_request_send("http://myapitool.jp/cash/indexexecute", $post);
+            sleep(1); // slack側にスパムだと認定されないように
+            $api_model->post_request_send("http://houseBook2.jp/cash/indexexecute", $post);
         }
     }
 
@@ -64,8 +64,7 @@ class cash_batch_model extends cashModel
             $msg .= PHP_EOL . "合計  : $sum_name  = " . number_format($sum_price);
         }
         
-        $slack_push_model = new slack_push_model();
-        $slack_push_model->push_msg($msg);
+        parent::slack_push_msg($msg);
     }
 
 }

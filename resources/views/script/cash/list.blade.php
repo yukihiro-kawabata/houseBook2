@@ -57,6 +57,7 @@
 
     <hr style="height: 10px;"></hr>
 
+    <?php //////////////////////// 明細データ //////////////////////// ?>
     <div class="table-responsive">
         <table class="table table-sm table-hover table_style">
             <thead>
@@ -86,6 +87,26 @@
         </table>
     </div>
 
+
+    <?php //////////////////////// 集計科目・年月ごとのグラフ //////////////////////// ?>
+    <div>
+        <ul id="graph_tab" class="nav nav-tabs" style="font-size: 12px;">
+            <li class="nav-item"><a id="nav-graph-food-cost" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('food-cost');">食費</a></li>
+            <li class="nav-item"><a id="nav-graph-eating-out" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('eating-out');">外食</a></li>
+            <li class="nav-item"><a id="nav-graph-utility-cost" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('utility-cost');">光熱費</a></li>
+            <li class="nav-item"><a id="nav-graph-social-expence" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('social-expence');">遊興費</a></li>
+            <li class="nav-item"><a id="nav-graph-life-cost" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('life-cost');">日用品</a></li>
+        </ul>
+    </div>
+    <div id="graph">
+        <div id="food-cost-graph"><cash-list-food-cost-graph-component></cash-list-food-cost-graph-component></div>
+        <div id="eating-out-graph"><cash-list-eating-out-graph-component></cash-list-eating-out-graph-component></div>
+        <div id="utility-cost-graph"><cash-list-utility-cost-graph-component></cash-list-utility-cost-graph-component></div>
+        <div id="social-expence-graph"><cash-list-social-expence-graph-component></cash-list-social-expence-graph-component></div>
+        <div id="life-cost-graph"><cash-list-life-cost-graph-component></cash-list-life-cost-graph-component></div>
+    </div>
+
+    <?php //////////////////////// 集計科目・年月ごとのデータ //////////////////////// ?>
     <div class="table-responsive">
         <table class="table table-sm table-hover table_style">
             <thead>
@@ -97,16 +118,14 @@
                 </tr>
             </thead>
             <tbody>
-                
-                    @foreach (all_year_month() as $month => $val)
-                        <tr>
-                            <th>{{ $month }}</th>
-                            @foreach ($view['sum_kamoku_month_list']['kamoku_list'] as $kamoku_name => $val)
-                                <td>{{ number_format($view['sum_kamoku_month_list'][$kamoku_name][$month]) }}</td>
-                            @endforeach 
-                        </tr>
-                    @endforeach
-                
+                @foreach (all_year_month() as $month => $val)
+                    <tr>
+                        <th>{{ $month }}</th>
+                        @foreach ($view['sum_kamoku_month_list']['kamoku_list'] as $kamoku_name => $val)
+                            <td>{{ number_format($view['sum_kamoku_month_list'][$kamoku_name][$month]) }}</td>
+                        @endforeach 
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -163,6 +182,16 @@
     }
     change_tab('ALL');<?php // デフォルトは全て ?>
 
+    <?php // 科目ごとのグラフ選択タブ ?>
+    function change_tab_graph(name) {
+        $("#graph").find("div").addClass("display_off");
+        $("#graph_tab").find("a").removeClass("active");
+
+        document.getElementById(name + "-graph").classList.remove("display_off");
+        $("#" + name + "-graph").find("div").removeClass("display_off");        
+        document.getElementById("nav-graph-" + name).classList.add("active");
+    }
+
 
     <?php // ページ更新時の処理 ?>
     function page_reload(obj) {
@@ -171,22 +200,13 @@
         <?php
             switch (mt_rand(1, 6)) {
                 case 1:
-                    $animate = "rotateOut";
-                    break;
-                case 2:
                     $animate = "zoomOutUp";
-                    break;
-                case 3:
-                    $animate = "zoomOutRight";
-                    break;
-                case 4:
-                    $animate = "zoomOutLeft";
                     break;
                 case 5:
                     $animate = "hinge";
                     break;
                 default:
-                    $animate = "zoomOutUp";
+                    $animate = "rotateOut";
             }
         ?>
         pageBodyObj.classList.add("{{ $animate }}");

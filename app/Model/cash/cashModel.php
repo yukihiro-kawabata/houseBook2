@@ -2,13 +2,13 @@
 
 namespace App\Model\cash;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Model\common_model;
 
 use App\db\cash;
 
-class cashModel extends Model
+class cashModel extends common_model
 {
-    private $devit_day_from = 16;
+    private $devit_day_from = 15;
     private $devit_day_to = 15;
 
     public $userDatas = ['devit', 'kabigon', 'yukihiro', 'share'];
@@ -98,12 +98,15 @@ class cashModel extends Model
      * @param string|date $date 指定年月
      * @return int $re 残高
      */
-    public function sum_balance_this_month($date) : array
+    public function sum_balance_target_month($date) : array
     {
         $re= ['income' => 0, 'expence' => 0, 'profit' => 0];
 
+        $year  = preg_replace('/\d{2}$/', '', $date);
+        $month = preg_replace('/^\d{4}/', '', $date);
+
         $cashDao = new cash();
-        $sum_balance = $cashDao->sum_balance(date('Y-m-01', strtotime($date)), date('Y-m-31', strtotime($date)));
+        $sum_balance = $cashDao->sum_balance("$year-$month-01", "$year-$month-31");
         foreach ($sum_balance as $num => $data) {
             if ($data->amount_flg === 1) $re['income']  = $data->balance;
             if ($data->amount_flg === 2) $re['expence'] = $data->balance;
@@ -122,7 +125,7 @@ class cashModel extends Model
 
         $year  = preg_replace('/\d{2}$/', '', $date);
         $month = (int)preg_replace('/^\d{4}/', '', $date);
-        
+
         // 指定年月が今月　且つ　今月が15日を過ぎていなければ
         if ($month === (int)date('n') && (int)date('d') < 15) {
             $from = "$year-" . sprintf('%02d', $month - 1) . "-" . $this->devit_day_from;
@@ -131,7 +134,7 @@ class cashModel extends Model
             $from = "$year-" . sprintf('%02d', $month) . "-" . $this->devit_day_from;
             $to   = "$year-" . sprintf('%02d', $month + 1) . "-" . $this->devit_day_to;
         }
-        
+
         $cashDao = new cash();
         $re = 0;
         foreach ($cashDao->devit_pay_amont($from, $to) as $num => $data) {          

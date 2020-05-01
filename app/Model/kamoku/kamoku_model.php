@@ -2,11 +2,11 @@
 
 namespace App\Model\kamoku;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Model\common_model;
 
 use App\db\kamoku_mst;
 
-class kamoku_model extends Model
+class kamoku_model extends common_model
 {
     protected $amount_flg = [1 => '収入', 2 => '支出'];
 

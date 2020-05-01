@@ -10,6 +10,10 @@
         <link rel="icon" type="image/png" href="{{ asset('kabigon_manew_xo.ico') }}">
         <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('kabigon_manew_xo.ico') }}">
 
+        <?php // laravel defult ?>
+        <script src="{{ mix('/js/app.js') }}" defer></script>
+        <?php ///// 使ってない  <script src="{{ mix('/css/app.js') }}" defer></script> ?>
+
         <?php // bootstrap ?>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>

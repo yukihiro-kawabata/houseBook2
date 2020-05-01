@@ -21,7 +21,7 @@ function all_year_month() : array
     $re = [];
     $cnt = 0;
     for ($i = date('Ym'); $i > 0; $i--) {        
-        if ($cnt === 18) break; // 18ヶ月前
+        if ($cnt === 13) break; // 18ヶ月前
         if (preg_replace('/^\d{4}/', '', $i) === '00') {
             $i = (int)preg_replace('/\d{2}$/', '', $i) - 1 . '12';
         }
