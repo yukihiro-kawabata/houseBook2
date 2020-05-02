@@ -64,16 +64,19 @@ class cashModel extends common_model
 
             $kamoku[$data->kamoku_sum] = '';
         }
-        $re = $tmp; // 良い方法が思いつかなかったので不格好。集計の集計をするのでこの形
         $re['kamoku_list'] = $kamoku;
 
         // 今月から1年前までの配列を用意する（DBで取得するとデータがない月は上記の処理で年月なしで来るので補填するのが目的）
         foreach ($tmp as $sum_kamoku => $data) {
             foreach (all_year_month() as $month => $val) {
-                if (!array_key_exists($month, $re[$sum_kamoku])) $re[$sum_kamoku][$month] = 0;
+                if (!array_key_exists($month, $tmp[$sum_kamoku])) {
+                    $re[$sum_kamoku][$month] = 0;
+                } else {
+                    $re[$sum_kamoku][$month] = $tmp[$sum_kamoku][$month];
+                }
             }
+            // ksort($re[$sum_kamoku]); // 年月を補填すると格納されている年月がぐちゃぐちゃなので昇順に並び替える
         }
-
         return $re;
     }
 

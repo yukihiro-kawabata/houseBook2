@@ -35,7 +35,8 @@ class api_model extends common_model
         $re = [];
 
         $cashModel = new cashModel();
-        $sum_kamoku_all_data = $cashModel->sum_kamoku_list_all();
+        $sum_kamoku_all_data = $cashModel->sum_kamoku_list_all(); 
+        unset($sum_kamoku_all_data['kamoku_list']);
         foreach ($sum_kamoku_all_data as $sum_kamoku => $data) {
             foreach ($data as $month => $price) {
                 if ($axis === 'x') $re[] = $month;
