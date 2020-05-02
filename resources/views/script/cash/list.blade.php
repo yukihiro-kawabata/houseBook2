@@ -99,7 +99,7 @@
             <li class="nav-item"><a id="nav-graph-life-cost" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('life-cost');">日用品</a></li>
         </ul>
     </div>
-    <div id="graph">
+    <div id="app">
         <div id="food-cost-graph"><cash-list-food-cost-graph-component></cash-list-food-cost-graph-component></div>
         <div id="eating-out-graph"><cash-list-eating-out-graph-component></cash-list-eating-out-graph-component></div>
         <div id="utility-cost-graph"><cash-list-utility-cost-graph-component></cash-list-utility-cost-graph-component></div>
@@ -167,6 +167,7 @@
     .display_off {
         display: none;
     }
+    
 </style>
 
 <script type="text/javascript">
@@ -185,7 +186,7 @@
 
     <?php // 科目ごとのグラフ選択タブ ?>
     function change_tab_graph(name) {
-        $("#graph").find("div").addClass("display_off");
+        $("#app").find("div").addClass("display_off");
         $("#graph_tab").find("a").removeClass("active");
 
         document.getElementById(name + "-graph").classList.remove("display_off");
@@ -219,26 +220,16 @@
 
     <?php // 削除ボタン ?>
     function deleteBtn(id, name, price, tag, date) {
-        msg = "<b><u>削除対象のデータ</u></b>" + '<br />'
-            + '対象者 : ' + name  + '<br />'
-            + '金額　 : ' + price + '<br />'
-            + '科目　 : ' + tag   + '<br />'
-            + '発生日 : ' + date  + '<br />'
-            + '<br />'
-            + '<small>10秒後に自動的にキャンセルされます</small>';
-        $.confirm({
-            title: '本当に削除しますか',
-            content: msg,
-            autoClose: 'Cancel|9000',
-            buttons: {
-                Yes: function () {
-                    deleteexecute(id);
-                },
-                Cancel: function () {
-                    
-                }
-            }
-        });
+        msg = "削除対象のデータ" + '\n'
+            + '----------------------------' + '\n'
+            + '対象者 : ' + name  + '\n'
+            + '金額　 : ' + price + '\n'
+            + '科目　 : ' + tag   + '\n'
+            + '発生日 : ' + date  + '\n'
+
+        if (confirm("データを削除します\n\n" + msg)) {
+            deleteexecute(id);
+        }
     }
     <?php // 削除処理 ?>
     function deleteexecute(id) {

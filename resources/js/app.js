@@ -33,5 +33,6 @@ Vue.component('cash-list-life-cost-graph-component', require('./components/cash/
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const graph1 = new Vue({ el: '#graph' });
+ const graph1 = new Vue({ el: '#app' });
+
 

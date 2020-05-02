@@ -3,6 +3,8 @@
 
 @section('body')
 
+<div id="app"></div>
+
 <div id="pageBody" class="container-fluid">
 
     <button type="button" class="btn btn-outline-primary regist_form_show_btn" onclick="document.getElementById('regist_main_form').classList.toggle('display_off');">新規科目登録</button>
@@ -38,7 +40,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary btn-sm float-right" onclick="registBtn();">登録</button>
+                <button type="button" id="regist_btn" class="btn btn-primary btn-sm float-right" onclick="registBtn();">登録</button>
             </div>
         </form>
     </div>
@@ -91,19 +93,10 @@
 <script type="text/javascript">
     <?php //// 登録ボタン  ?>
     function registBtn() {
-        $.confirm({
-            title: '登録をします',
-            content: '登録をします',
-            autoClose: 'Cancel|9000',
-            buttons: {
-                Yes: function () {
-                    document.regist_form.submit();
-                },
-                Cancel: function () {
-                    console.log("cancel");
-                }
-            }
-        });
+        if (confirm("登録をしますか")) {
+            document.getElementById("regist_btn").remove();
+            document.regist_form.submit();
+        }
     }
 </script>
 

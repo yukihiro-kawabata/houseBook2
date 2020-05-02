@@ -3,6 +3,8 @@
 
 @section('body')
 
+<div id="app"></div>
+
 <div id="loading" class="display_off" style="opacity:0;"><i class="fas fa-spinner fa-5x fa-spin"></i></div>
 
 <div id="main_form" class="container-fluid">

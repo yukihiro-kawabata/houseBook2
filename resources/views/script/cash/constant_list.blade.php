@@ -5,6 +5,8 @@
 
 <div id="pageBody" class="container-fluid">
 
+    <div id="app"></div>
+
     <div class="table-responsive">
         <table class="table table-sm table-hover" style="font-size: 11px;min-width: 680px;">
             <thead>

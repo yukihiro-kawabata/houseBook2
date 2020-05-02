@@ -53,8 +53,9 @@ class cash extends Model
         $sql .= " FROM `cash`";
         $sql .= " INNER JOIN kamoku_mst ON cash.kamoku_id = kamoku_mst.kamoku_id ";
         $sql .= " WHERE cash.delete_flg = 0 ";
+        $sql .= "      AND kamoku_mst.kamoku_sum != '調整勘定' ";
         $sql .= " GROUP BY kamoku_mst.kamoku_sum, kamoku_mst.amount_flg, cash.date ";
-        $sql .= " ORDER BY cash.date DESC, kamoku_mst.amount_flg DESC ";
+        $sql .= " ORDER BY kamoku_mst.amount_flg DESC, kamoku_mst.kamoku_sum DESC ";
 
         return DB::select($sql);
     }
