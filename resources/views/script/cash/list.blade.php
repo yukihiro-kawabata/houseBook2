@@ -205,10 +205,10 @@
                     $animate = "zoomOutUp";
                     break;
                 case 5:
-                    $animate = "hinge";
+                    $animate = "rotateOut";
                     break;
                 default:
-                    $animate = "rotateOut";
+                    $animate = "hinge";
             }
         ?>
         pageBodyObj.classList.add("{{ $animate }}");
