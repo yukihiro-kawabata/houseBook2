@@ -28,6 +28,17 @@ $ #### npm install --save vue-router
 $ chmod -R 777 storage
 $ chmod -R 777 bootstrap/cache
 
+$ cp .env.example .env
+$ vim .env
+````
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=hoge
+DB_USERNAME=hoge
+DB_PASSWORD=hoge
+````
+
 $ php artisan ui vue
 $ php artisan migrate
 $ php artisan db:seed # テストデータ挿入
