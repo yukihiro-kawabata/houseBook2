@@ -34,6 +34,9 @@ $ php artisan db:seed # テストデータ挿入
 
 # ビルド実行
 $ npm run dev
+
+# 使用するユーザ名を設定
+$ vim config/cash_const.php
 ```
 
 ## License

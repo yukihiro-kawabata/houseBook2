@@ -9,6 +9,8 @@ use Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
+use Illuminate\Support\Facades\Config;
+
 use App\db\cash;
 use App\db\constant_cash;
 use App\db\kamoku_mst;
@@ -38,7 +40,7 @@ class cashController extends commonController
         if (!array_key_exists('constant', $request)) $request['constant'] = false;
 
         return view('script.cash.index')->with([
-            "userDatas"   => $cashModel->userDatas,
+            "userDatas"   => Config::get('cash_const.user_name'),
             "kamokuDatas" => $kamokuDatas,
             "request"     => $request,
         ]);
@@ -118,7 +120,7 @@ class cashController extends commonController
         return view('script.cash.list')->with([
             "view" => $view,
             "request" => $request,
-            "userDatas" => array_merge(['ALL'], $cashModel->userDatas),
+            "userDatas" => array_merge(['ALL'], Config::get('cash_const.user_name')),
         ]);
     }
 

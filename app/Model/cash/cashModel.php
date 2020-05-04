@@ -3,6 +3,7 @@
 namespace App\Model\cash;
 
 use App\Model\common_model;
+use Illuminate\Support\Facades\Config;
 
 use App\db\cash;
 
@@ -10,8 +11,6 @@ class cashModel extends common_model
 {
     private $devit_day_from = 15;
     private $devit_day_to = 15;
-
-    public $userDatas = ['devit', 'kabigon', 'yukihiro', 'share'];
 
     /*
      * 一覧で使用する集計科目ごとのサマリーデータ
@@ -27,7 +26,7 @@ class cashModel extends common_model
         $cashDao = new cash();
         $data = [];
         // null でユーザ制限をなくして取得ができる
-        foreach (array_merge($this->userDatas, [null]) as $user_name) {
+        foreach (array_merge(Config::get('cash_const.user_name'), [null]) as $user_name) {
             $cashDatas = $cashDao->fetch_kamoku_sum_price("$year-$month", $user_name);
             $key_name = $user_name;
             if (is_null($key_name)) $key_name = "ALL"; // view側の仕様
