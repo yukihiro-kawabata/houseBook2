@@ -7,7 +7,7 @@
 
 ## できること
 
-- 家計簿 (2020/05/01)
+- ![家計簿 (2020/05/01)](https://github.com/yukihiro-kawabata/houseBook2/blob/master/document/household_expenses/README.md)
 
 ## Learning Laravel
 ### Please set up laravel from the following
@@ -39,6 +39,7 @@ DB_USERNAME=hoge
 DB_PASSWORD=hoge
 ````
 
+$ php artisan key:generate
 $ php artisan ui vue
 $ php artisan migrate
 $ php artisan db:seed # テストデータ挿入
@@ -46,9 +47,21 @@ $ php artisan db:seed # テストデータ挿入
 # ビルド実行
 $ npm run dev
 
-# 使用するユーザ名を設定
+# 家計簿を使用するユーザ名を設定
 $ vim config/cash_const.php
+````
+
+### Slack通知を行う場合は設定
+![Slack Web APIの公式サイト](https://api.slack.com/web)
+````
+$ vim .env
+SLACK_WEB_API_URL=http://
 ```
+
+## アクセス
+````
+http://localhost/cash/list
+````
 
 ## License
 
