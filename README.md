@@ -1,9 +1,13 @@
 # 自宅で使用するWebアプリ
 
-- laravel 6.2.*
-- php = 72
-- MySQL = 56
-- Vue.js = 2.6
+![](https://img.shields.io/badge/laravel-6.2.*-orange)
+![](https://img.shields.io/badge/PHP-7.2-brightgreen)
+![](https://img.shields.io/badge/MySQL-5.7-green)
+![](https://img.shields.io/badge/Vue-2.6-blueviolet)
+![](https://img.shields.io/badge/npm-3.5.2-blueviolet)
+![](https://img.shields.io/badge/node-v8.10.0-blueviolet)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
+
 
 ## できること
 
@@ -16,8 +20,7 @@ Laravel has the most extensive and thorough [documentation](https://laravel.com/
 
 If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## 最初に行うこと（抜粋）
-
+## 最初に行うこと
 ```
 $ composer install
 $ npm install
@@ -29,15 +32,7 @@ $ chmod -R 777 storage
 $ chmod -R 777 bootstrap/cache
 
 $ cp .env.example .env
-$ vim .env
-````
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=hoge
-DB_USERNAME=hoge
-DB_PASSWORD=hoge
-````
+$ vim .env　# DB設定をしてください
 
 $ php artisan key:generate
 $ php artisan ui vue
@@ -56,7 +51,7 @@ $ vim config/cash_const.php
 ````
 $ vim .env
 SLACK_WEB_API_URL=http://
-```
+````
 
 ## アクセス
 ````
