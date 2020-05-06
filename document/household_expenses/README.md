@@ -38,7 +38,7 @@ http://localhost/kamoku/list
 # 一括登録設定
 http://localhost/cash/index?constant=true
 
-# 自動登録された一覧
+# 一括登録するリスト
 http://localhost/cash/constant/list
 ````
 下記のコマンドで、一括して登録ができる
