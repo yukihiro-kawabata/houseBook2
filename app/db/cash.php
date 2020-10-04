@@ -13,7 +13,8 @@ class cash extends Model
     public function fetch_all_detail_date(string $from, string $to)
     {
         $sql  = "";
-        $sql .= " SELECT * ";
+        $sql .= " SELECT *, ";
+        $sql .= " (CASE half_flg WHEN 1 THEN '月末精算' ELSE '' END) AS half_flg_str ";
         $sql .= " FROM `cash` ";
         $sql .= " WHERE delete_flg = 0 ";
         $sql .= " AND ( ";
@@ -98,4 +99,15 @@ class cash extends Model
         return DB::select($sql);
     }
 
+    // 月末精算用のデータを取得する
+    public function fetch_pay_off(int $month)
+    {
+        $sql  = "";
+        $sql .= " SELECT name, SUM(price) AS price ";
+        $sql .= " FROM $this->table ";
+        $sql .= " WHERE `half_flg` = 1 ";
+        $sql .= "   AND `created_at` BETWEEN '2020-$month-01 00:00:00' AND '2020-$month-31 23:59:59' ";
+        $sql .= " GROUP BY name";
+        return DB::select($sql);
+    }
 }

@@ -24,6 +24,7 @@ class CreateCashTable extends Migration
             $table->text('detail')->nullable()->comment('詳細内容');
             $table->integer('priceFlg')->default(2)->comment('1:収入, 2:支出');
             $table->boolean('sumFlg')->nullable()->comment('0:集計対象外,1:集計対象');
+            $table->boolean('half_flg')->default(0)->comment('0:特になし1:費用負担を折半する');
             $table->boolean('delete_flg')->default(0)->comment('0:存在,1:削除');
             $table->timestamps();
         });

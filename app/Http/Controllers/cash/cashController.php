@@ -56,6 +56,7 @@ class cashController extends commonController
             'date'      => '日時',
             'comment'   => '概要',
             'kamoku_id' => '勘定科目',
+            'half_flg'  => '月末精算',
         ];
 
         // 自動登録設定なら
@@ -68,7 +69,9 @@ class cashController extends commonController
         // 入力値をチェック
         foreach ($array as $col => $val) {
             if (!empty($request['constant']) && $col === 'date') continue; // 自動登録設定のときは、dateカラムは無視
-            if (empty($request[$col])) dx($val . 'が足りません');
+            if (empty($request[$col]) && !in_array($col, ['half_flg'], true)) {
+                dx($val . 'が足りません');
+            }
             // データ登録準備
             $cashDao->{$col} = $request[$col];
         }
@@ -84,8 +87,9 @@ class cashController extends commonController
 
         // 新規登録なら
         if (empty($request['constant'])) {
+            $half_flg_msg = !empty($request['half_flg']) ? "月末精算対象です" : "";
             // slackに通知
-            $msg  = "1件データが追加されました" . PHP_EOL;
+            $msg  = "1件データが追加されました。". $half_flg_msg . PHP_EOL ;
             $msg .= "------------------------------------" . PHP_EOL;
             $msg .= "対象者：" . $request['name']    . PHP_EOL;
             $msg .= "金額　：" . number_format((int)$request['price']) . PHP_EOL;

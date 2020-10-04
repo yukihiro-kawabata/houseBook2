@@ -13,7 +13,8 @@ class constant_cash extends Model
     public function fetch_all_data()
     {
         $sql  = "";
-        $sql .= " SELECT * ";
+        $sql .= " SELECT *, ";
+        $sql .= " (CASE half_flg WHEN 1 THEN '月末精算' ELSE '' END) AS half_flg_str ";
         $sql .= " FROM $this->table ";
         return DB::select($sql);
     }

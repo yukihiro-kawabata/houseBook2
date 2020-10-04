@@ -48,11 +48,11 @@ class kamokuController extends commonController
 
         // slackに通知する
         $msg = "新規科目が追加されました"                  . PHP_EOL;
-        $msg = "-------------------------------"       . PHP_EOL;
-        $msg = "末端科目 : " . $request['kamoku']       . PHP_EOL;
-        $msg = "集計科目 : " . $request['kamoku_sum']   . PHP_EOL;
-        $msg = "収入支出 : " . $request['amount_flg']   . PHP_EOL;
-        $msg = "優先度 : "   . $request['priority_flg'] . PHP_EOL;
+        $msg .= "-------------------------------"       . PHP_EOL;
+        $msg .= "末端科目 : " . $request['kamoku']       . PHP_EOL;
+        $msg .= "集計科目 : " . $request['kamoku_sum']   . PHP_EOL;
+        $msg .= "収入支出 : " . $request['amount_flg']   . PHP_EOL;
+        $msg .= "優先度 : "   . $request['priority_flg'] . PHP_EOL;
         $this->common_model()->slack_push_msg($msg);
 
         return redirect(url('/kamoku/list'));

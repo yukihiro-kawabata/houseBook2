@@ -52,9 +52,12 @@
             <input type="text" class="form-control input-sm" id="comment" name="comment" placeholder="概要">
         </div>
 
-        <div class="form-group" style="display:none">
-            <label>詳細</label>
-            <textarea class="form-control  input-sm" rows="3" id="detail" name="detail" placeholder="詳細"></textarea>
+        <div class="form-group">
+            <label>月末精算対象</label>
+            <select id="half_flg" name="half_flg" class="form-control" onChange="if (document.getElementById('name').value === 'devit') {alert('デビットカードのとき月末精算は対象外です'); this.value = 0;}">
+                <option value=0 selected="selected">対象外</option>
+                <option value=1>対象</option>
+            </select>
         </div>
 
         <div class="form-group">

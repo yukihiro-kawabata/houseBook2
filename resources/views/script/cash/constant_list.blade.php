@@ -15,6 +15,7 @@
                 <th scope="col" style="width: 50px;">金額</th>
                 <th scope="col" style="width: 95px;">科目</th>
                 <th scope="col">概要</th>
+                <th scope="col" class="text-right">月末精算</th>
                 <th scope="col" style="width: 80px;"></th>
             </tr>
             </thead>
@@ -26,6 +27,7 @@
                             <td>{{ number_format((int)$detail->price) }}</td>
                             <td>{{ $detail->tag }}</td>
                             <td>{{ $detail->comment }}</td>
+                            <td class="text-right">{{ $detail->half_flg_str }}</td>
                             <td class="text-center"><button type="button" class="button_cumstom" onclick="deleteBtn('{{ $detail->id }}', '{{ $detail->name }}', '{{ $detail->price }}', '{{ $detail->tag }}');">削除</button></td>
                         </tr>
                     @endforeach
@@ -72,25 +74,14 @@
 
     <?php // 削除ボタン ?>
     function deleteBtn(id, name, price, tag) {
-        msg = "<b><u>削除対象のデータ</u></b>" + '<br />'
-            + '対象者 : ' + name  + '<br />'
-            + '金額　 : ' + price + '<br />'
-            + '科目　 : ' + tag   + '<br />'
-            + '<br />'
-            + '<small>10秒後に自動的にキャンセルされます</small>';
-        $.confirm({
-            title: '本当に削除しますか',
-            content: msg,
-            autoClose: 'Cancel|9000',
-            buttons: {
-                Yes: function () {
-                    deleteexecute(id);
-                },
-                Cancel: function () {
-                    
-                }
-            }
-        });
+        msg = "削除対象のデータ" + '\n'
+            + '対象者 : ' + name  + '\n'
+            + '金額　 : ' + price + '\n'
+            + '科目　 : ' + tag   + '\n'
+
+        if (confirm("データを削除します\n\n" + msg)) {
+            deleteexecute(id);
+        }
     }
     <?php // 削除処理 ?>
     function deleteexecute(id) {
