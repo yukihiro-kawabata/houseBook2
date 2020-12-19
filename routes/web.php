@@ -39,3 +39,9 @@ Route::get('/api/cash/sum_kamoku_graph', 'api\apiController@fetch_cash_sum_kamok
 Route::get('/kamoku/list', 'kamoku\kamokuController@listAction');
 // regist of kamoku master
 Route::get('/kamoku/indexexecute', 'kamoku\kamokuController@indexexecute');
+
+// remind list
+Route::get('/remind/list', 'remind\remindController@listAction');
+// register remind
+Route::get('/remind/indexexecute', 'remind\remindController@indexexecute');
+Route::post('/remind/indexexecute', 'remind\remindController@indexexecute');

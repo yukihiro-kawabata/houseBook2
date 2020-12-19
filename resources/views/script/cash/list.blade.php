@@ -20,10 +20,17 @@
     </div>
     
     <ul class="list-group list-group-flush">
-        <li class="list-group-item list-group-item-success">残高<span class="badge badge-success float-right">{{ number_format($view['sum_balance']) }}</span></li>
-        <li class="list-group-item list-group-item-success">Devit 使用額<span class="badge badge-success float-right">{{ number_format($view['devit_pay']) }}</span></li>
-    <li class="list-group-item list-group-item-danger">今月支出<span class="badge badge-danger float-right">{{ number_format($view['sum_balance_target_month']['expence']) }}</span></li>
-        <li class="list-group-item list-group-item-primary">今月利益<span class="badge badge-primary float-right">{{ number_format($view['sum_balance_target_month']['profit']) }}</span></li>
+        <li class="list-group-item list-group-item-success">残高<span class="badge bg-success float-right">{{ number_format($view['sum_balance']) }}</span></li>
+        <li class="list-group-item list-group-item-success">Devit 使用額<span class="badge bg-success float-right">{{ number_format($view['devit_pay']) }}</span></li>
+        <li class="list-group-item list-group-item-danger">今月支出<span class="badge bg-danger float-right">{{ number_format($view['sum_balance_target_month']['expence']) }}</span></li>
+        <li class="list-group-item list-group-item-primary">今月利益<span class="badge bg-primary float-right">{{ number_format($view['sum_balance_target_month']['profit']) }}</span></li>
+        <details>
+            <summary>月末精算サマリー</summary>
+            <li class="list-group-item list-group-item-warning">yukihiro負担額<span class="badge bg-warning float-right">{{ number_format($view['pay_off']['yukihiro']) }}</span></li>
+            <li class="list-group-item list-group-item-warning">kabigon負担額<span class="badge bg-warning float-right">{{ number_format($view['pay_off']['kabigon']) }}</span></li>
+            <li class="list-group-item list-group-item-warning">差額の折半<span class="badge bg-warning float-right">{{ number_format($view['pay_off']['half']) }}</span></li>
+            
+        </details>
     </ul>
 
     <hr style="height: 10px;"></hr>
@@ -46,9 +53,9 @@
                 <li class="list-group-item">
                     {{ $sum_kamoku_list['kamoku_sum'] }}
                     @if ($sum_kamoku_list['amount_flg'] == 1) <?php // 収入 ?>
-                        <span class="badge badge-primary float-right">{{ $sum_kamoku_list['amount'] }}</span>
+                        <span class="badge bg-primary float-right">{{ $sum_kamoku_list['amount'] }}</span>
                     @else <?php // 支出 ?>
-                        <span class="badge badge-danger float-right">{{ $sum_kamoku_list['amount'] }}</span>
+                        <span class="badge bg-danger float-right">{{ $sum_kamoku_list['amount'] }}</span>
                     @endif
                 </li>
             @endforeach

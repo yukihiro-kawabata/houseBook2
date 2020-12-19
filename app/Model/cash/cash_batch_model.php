@@ -77,16 +77,7 @@ class cash_batch_model extends cashModel
     public function pay_off_notice(int $month) : string
     {
         $cashDao = new cash();
-
-        // 精算登録されたものをユーザごとにまとめる
-        $re = [];
-        foreach($cashDao->fetch_pay_off($month) as $num => $data) {
-            $re[$data->name] = $data->price;
-        }
-        // 精算対象者、全員分の精算金額をまとめる
-        foreach (Config::get('cash_const.pay_off_user') as $user) {
-            $user_pay[$user] = array_key_exists($user, $re) ? $re[$user] : 0;
-        }
+        $user_pay = $cashDao->fetch_pay_off_user_each($month);
         
         $msg = '◆個人負担金' . PHP_EOL;
         $msg .= 'kabigon: '. number_format($user_pay['kabigon']) . '円' . PHP_EOL;

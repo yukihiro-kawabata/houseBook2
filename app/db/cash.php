@@ -5,6 +5,8 @@ namespace App\db;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\Config;
+
 class cash extends Model
 {
     protected $table = 'cash';
@@ -105,9 +107,30 @@ class cash extends Model
         $sql  = "";
         $sql .= " SELECT name, SUM(price) AS price ";
         $sql .= " FROM $this->table ";
-        $sql .= " WHERE `half_flg` = 1 ";
-        $sql .= "   AND `created_at` BETWEEN '2020-$month-01 00:00:00' AND '2020-$month-31 23:59:59' ";
+        $sql .= " WHERE `half_flg` = 1 AND `delete_flg` = 0 ";
+        $sql .= "   AND `date` BETWEEN '2020-$month-01 00:00:00' AND '2020-$month-31 23:59:59' ";
         $sql .= " GROUP BY name";
         return DB::select($sql);
     }
+
+    // 月末精算対象のユーザごとの数字を返す
+    public function fetch_pay_off_user_each(int $month) : array
+    {
+        $month = sprintf('%02d', $month);
+
+        // 精算登録されたものをユーザごとにまとめる
+        $re = [];
+        foreach($this->fetch_pay_off($month) as $num => $data) {
+            $re[$data->name] = $data->price;
+        }
+        // 精算対象者、全員分の精算金額をまとめる
+        foreach (Config::get('cash_const.pay_off_user') as $user) {
+            $user_pay[$user] = array_key_exists($user, $re) ? $re[$user] : 0;
+        }
+        // 2人しかいない前提なので
+        $user_pay['diff'] = abs($user_pay['yukihiro'] - $user_pay['kabigon']);
+        $user_pay['half'] = round($user_pay['diff'] / 2);
+        return $user_pay;
+    }
+
 }
