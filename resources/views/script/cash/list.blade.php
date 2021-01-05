@@ -100,12 +100,13 @@
 
     <?php //////////////////////// 集計科目・年月ごとのグラフ //////////////////////// ?>
     <div>
-        <ul id="graph_tab" class="nav nav-tabs" style="font-size: 12px;">
+        <ul id="graph_tab" class="nav nav-tabs" style="font-size: 10px;">
             <li class="nav-item"><a id="nav-graph-food-cost" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('food-cost');">食費</a></li>
             <li class="nav-item"><a id="nav-graph-eating-out" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('eating-out');">外食</a></li>
             <li class="nav-item"><a id="nav-graph-utility-cost" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('utility-cost');">光熱費</a></li>
             <li class="nav-item"><a id="nav-graph-social-expence" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('social-expence');">遊興費</a></li>
             <li class="nav-item"><a id="nav-graph-life-cost" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph('life-cost');">日用品</a></li>
+            <li class="nav-item"><a id="nav-graph-life-cost" class="nav-link" href="javascript:void(0)" onclick="change_tab_graph();"><i class="fas fa-times"></i></a></li>
         </ul>
     </div>
     <div id="app">
@@ -197,6 +198,10 @@
     function change_tab_graph(name) {
         $("#app").find("div").addClass("display_off");
         $("#graph_tab").find("a").removeClass("active");
+
+        if (!name) {
+            return false;
+        }
 
         document.getElementById(name + "-graph").classList.remove("display_off");
         $("#" + name + "-graph").find("div").removeClass("display_off");        

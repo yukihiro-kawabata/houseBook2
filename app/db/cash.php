@@ -96,7 +96,7 @@ class cash extends Model
         $sql .= " FROM `cash` ";
         $sql .= " WHERE delete_flg = 0 ";
         $sql .= "     AND name = 'devit' ";
-        $sql .= "     AND date BETWEEN '$from' AND '$to' ";
+        $sql .= "     AND date BETWEEN '$from 0:00:00' AND '$to 23:59:59' ";
 
         return DB::select($sql);
     }
@@ -104,11 +104,14 @@ class cash extends Model
     // 月末精算用のデータを取得する
     public function fetch_pay_off(int $month)
     {
+        if (empty($date) || mb_strlen($date) !== 6) $date = date('Ym');
+        $year  = preg_replace('/\d{2}$/', '', $date);
+
         $sql  = "";
         $sql .= " SELECT name, SUM(price) AS price ";
         $sql .= " FROM $this->table ";
         $sql .= " WHERE `half_flg` = 1 AND `delete_flg` = 0 ";
-        $sql .= "   AND `date` BETWEEN '2020-$month-01 00:00:00' AND '2020-$month-31 23:59:59' ";
+        $sql .= "   AND `date` BETWEEN '$year-$month-01 00:00:00' AND '$year-$month-31 23:59:59' ";
         $sql .= " GROUP BY name";
         return DB::select($sql);
     }

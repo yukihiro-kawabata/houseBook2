@@ -9,8 +9,10 @@ use App\db\cash;
 
 class cashModel extends common_model
 {
-    private $devit_day_from = 15;
-    private $devit_day_to = 15;
+    /** デビットカードの使用限度額 */
+    const DEVIT_DEADLINE_AMOUNT = 70 * 1000;
+    /** デビットカードの使用ユーザー名 */
+    const DEVIT_NAME = 'devit';
 
     /*
      * 一覧で使用する集計科目ごとのサマリーデータ
@@ -120,21 +122,15 @@ class cashModel extends common_model
      * 現在のデビットカードの使用金額を取得する
      * @param int $date yyyymm形式の年月
      */ 
-    public function card_pay_fee(int $date) : int
+    public function card_pay_fee(int $date = 0) : int
     {
         if (empty($date) || mb_strlen($date) !== 6) $date = date('Ym');
 
         $year  = preg_replace('/\d{2}$/', '', $date);
         $month = (int)preg_replace('/^\d{4}/', '', $date);
 
-        // 指定年月が今月　且つ　今月が15日を過ぎていなければ
-        if ($month === (int)date('n') && (int)date('d') < 15) {
-            $from = "$year-" . sprintf('%02d', $month - 1) . "-" . $this->devit_day_from;
-            $to   = "$year-". sprintf('%02d', $month) . "-" . $this->devit_day_to;
-        } else {
-            $from = "$year-" . sprintf('%02d', $month) . "-" . $this->devit_day_from;
-            $to   = "$year-" . sprintf('%02d', $month + 1) . "-" . $this->devit_day_to;
-        }
+        $from = "$year-" . sprintf('%02d', $month) . "-01";
+        $to   = "$year-" . sprintf('%02d', $month) . "-31";
 
         $cashDao = new cash();
         $re = 0;
@@ -162,6 +158,14 @@ class cashModel extends common_model
 
         $cashDao = new cash();
         return $cashDao->fetch_all_detail_date($from, $to);
+    }
+
+    /**
+     * デビットカードの使用限度額までの残金を取得する
+     */
+    public function fetch_remain_devit_amount() : int
+    {
+        return self::DEVIT_DEADLINE_AMOUNT - $this->card_pay_fee();
     }
 
 }

@@ -34,6 +34,11 @@ class reminder_batch extends Command
         parent::__construct();
     }
 
+    private static function remindDao() : remind
+    {
+        return new remind();
+    }
+
     /**
      * Execute the console command.
      *
@@ -44,9 +49,9 @@ class reminder_batch extends Command
         $time = date('H:i');
 
         $slack_push_model = new slack_push_model();
-        $remindDao = new remind();
+        
 
-        foreach($remindDao->fetch_remind_taget_data($time) as $n => $data) {
+        foreach(self::remindDao()->fetch_remind_taget_data($time) as $n => $data) {
             $msg  = "";
             $msg .= "== リマインド ==" . PHP_EOL;
             $msg .= "$data->title" . PHP_EOL;
@@ -54,6 +59,27 @@ class reminder_batch extends Command
             $msg .= "$data->text" . PHP_EOL;
     
             $slack_push_model->push_msg($msg);
+
+            // 不要なデータは削除する
+            echo $this->delete_data($data);
         }
     }
+
+    /**
+     * 定期的にリマインドしない場合はデータを削除する
+     * @param object|array $data
+     * @return NULL|string
+     */
+    private function delete_data($data) : ?string
+    {
+        $re = NULL;
+
+        if (is_null($data->week)) {
+            self::remindDao()->where('id', $data->id)->delete();
+            $re = 'Deleted data of title: ' . $data->title;
+        }
+
+        return $re;
+    }
+
 }

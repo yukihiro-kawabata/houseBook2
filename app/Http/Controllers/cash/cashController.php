@@ -64,6 +64,7 @@ class cashController extends commonController
             $cashDao = new constant_cash();
         } else {
             $cashDao = new cash(); // 新規登録なら
+            $cashModel = new cashModel();
         }
 
         // 入力値をチェック
@@ -97,6 +98,12 @@ class cashController extends commonController
             $msg .= "概要　：" . $request['comment'] . PHP_EOL;
 
             $this->common_model()->slack_push_msg($msg);
+
+            // デビット使用限度額までの金額を通知する
+            if ($request['name'] === $cashModel::DEVIT_NAME) {
+                $msg1  = "◆デビットの使用限度額まで：". number_format($cashModel->fetch_remain_devit_amount()) . PHP_EOL;
+                $this->common_model()->slack_push_msg($msg1);
+            }
 
             return redirect(url('/cash/list') . '?id=' . $cashId);
         } else {
