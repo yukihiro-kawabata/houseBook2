@@ -45,3 +45,6 @@ Route::get('/remind/list', 'remind\remindController@listAction');
 // register remind
 Route::get('/remind/indexexecute', 'remind\remindController@indexexecute');
 Route::post('/remind/indexexecute', 'remind\remindController@indexexecute');
+
+// mail list
+Route::get('/mail/list', 'mail\mailController@listAction');
