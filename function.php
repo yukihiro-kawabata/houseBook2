@@ -51,3 +51,13 @@ function array_key_jug($key, array $array, string $msg = '')
         return false;
     }
 }
+/** 改行を取り除く */
+function remove_new_line_str(string $str)
+{
+    return preg_replace('/\r\n|\r|\n/', '', $str);
+}
+/** 空白を取り除く */
+function remove_space_str(string $str)
+{
+    return preg_replace('/ |　/', '', $str);
+}

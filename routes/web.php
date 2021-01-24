@@ -47,4 +47,6 @@ Route::get('/remind/indexexecute', 'remind\remindController@indexexecute');
 Route::post('/remind/indexexecute', 'remind\remindController@indexexecute');
 
 // mail list
-Route::get('/mail/list', 'mail\mailController@listAction');
+Route::get('/mail/import', 'mail\mailController@importAction');
+// register cash list from mail
+Route::get('/mail/importexecute', 'mail\mailController@importexecute');
