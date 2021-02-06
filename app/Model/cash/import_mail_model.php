@@ -53,7 +53,7 @@ class import_mail_model extends cashModel
     }
 
     /**
-     * りそなのデビットカード用
+     * タイムズカー用
      */
     private function import_times_car(string $body) : void
     {
@@ -66,7 +66,7 @@ class import_mail_model extends cashModel
 
         $data = [
             'name'      => 'yukihiro',
-            'price'     => preg_replace('/,/', '', remove_space_str($price)),
+            'price'     => replace_comma_for_type_integer(remove_space_str($price)),
             'date'      => $day,
             'comment'   => remove_new_line_str(remove_space_str($place) . " $car"),
             'kamoku_id' => 74, // シェアカー
@@ -91,7 +91,7 @@ class import_mail_model extends cashModel
 
         $data = [
             'name'      => 'devit',
-            'price'     => $price,
+            'price'     => replace_comma_for_type_integer($price),
             'date'      => $day,
             'comment'   => remove_new_line_str("$place $uniqe_number"),
             'kamoku_id' => array_key_exists($place, self::devit_kamoku_id_by_pay_place) ? self::devit_kamoku_id_by_pay_place[$place] : 38, // 38 = 外食
@@ -132,6 +132,6 @@ class import_mail_model extends cashModel
         curl_setopt($curl,CURLOPT_COOKIEFILE,     'tmp');
         curl_setopt($curl,CURLOPT_FOLLOWLOCATION, TRUE); // Locationヘッダを追跡
         
-        $output = curl_exec($curl); 
+        $output = curl_exec($curl);
     }
 }

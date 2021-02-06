@@ -61,3 +61,8 @@ function remove_space_str(string $str)
 {
     return preg_replace('/ |　/', '', $str);
 }
+/** 金額に入っているカンマを取り除く */
+function replace_comma_for_type_integer(string $str) : int
+{
+    return (int)preg_replace('/,|、|，|/', '', $str);
+}
