@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Model\remind;
+namespace App\Model\todo;
 
 use App\Model\common_model;
 
-use App\db\remind;
+use App\db\todo;
 
-class remind_model extends common_model
+class todo_model extends common_model
 {
     const DAY_OF_WEEKS = [
         0 => '日曜',
@@ -18,8 +18,8 @@ class remind_model extends common_model
         6 => '土曜',
     ];
 
-    protected static function remindDao() : remind
+    protected static function todoDao() : todo
     {
-        return new remind();
+        return new todo();
     }
 }

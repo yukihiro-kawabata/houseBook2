@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Config;
 
-class remind extends Model
+class todo extends Model
 {
-    protected $table = 'remind';
+    protected $table = 'todo';
 
     private function get_const_week_array()
     {
-        $remind_model = new \App\Model\remind\remind_model();
-        return $remind_model::DAY_OF_WEEKS;
+        $todo_model = new \App\Model\todo\todo_model();
+        return $todo_model::DAY_OF_WEEKS;
     }
 
     // 全ての情報
@@ -37,8 +37,8 @@ class remind extends Model
         return $re;
     }
 
-    // 今、リマンドする対象データを取得する
-    public function fetch_remind_taget_data($time)
+    // 今、リマインドする対象データを取得する
+    public function fetch_todo_taget_data($time)
     {
         $sql  = "";
         $sql .= " SELECT * ";

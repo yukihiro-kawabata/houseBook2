@@ -10,7 +10,7 @@
     <div>
       <details>
           <summary>新規追加</summary>
-            <form method="GET" name="registerForm" action="{{ url('/remind/indexexecute') }}">
+            <form method="GET" name="registerForm" action="{{ url('/todo/indexexecute') }}">
               <div class="row mb-3">
                 <label for="title" class="col-sm-2 col-form-label">タイトル</label>
                 <div class="col-sm-10">

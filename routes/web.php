@@ -40,11 +40,11 @@ Route::get('/kamoku/list', 'kamoku\kamokuController@listAction');
 // regist of kamoku master
 Route::get('/kamoku/indexexecute', 'kamoku\kamokuController@indexexecute');
 
-// remind list
-Route::get('/remind/list', 'remind\remindController@listAction');
-// register remind
-Route::get('/remind/indexexecute', 'remind\remindController@indexexecute');
-Route::post('/remind/indexexecute', 'remind\remindController@indexexecute');
+// todo list
+Route::get('/todo/list', 'todo\todoController@listAction');
+// register todo
+Route::get('/todo/indexexecute', 'todo\todoController@indexexecute');
+Route::post('/todo/indexexecute', 'todo\todoController@indexexecute');
 
 // mail list
 Route::get('/mail/import', 'mail\mailController@importAction');

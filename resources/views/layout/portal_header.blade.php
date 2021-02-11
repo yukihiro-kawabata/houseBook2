@@ -45,7 +45,7 @@
                         <li><a href="{{ url('/cash/index') . '?constant=true' }}" style="color:#fff;">自動登録設定</a></li>
                         <li><a href="{{ url('/cash/constant/list') }}" style="color:#fff;">自動登録一覧</a></li>
                         <li><a href="{{ url('/kamoku/list') }}" style="color:#fff;">科目一覧</a></li>
-                        <li><a href="{{ url('/remind/list') }}" style="color:#fff;">リマインダー</a></li>
+                        <li><a href="{{ url('/todo/list') }}" style="color:#fff;">ToDo</a></li>
                         <li><a href="{{ url('/mail/import') }}" style="color:#fff;">メール取込</a></li>
                     </ul>
                 </div>

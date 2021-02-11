@@ -13,10 +13,10 @@ class CreateRemindTable extends Migration
      */
     public function up()
     {
-        Schema::create('remind', function (Blueprint $table) {
+        Schema::create('todo', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title')->comment('タイトル');
-            $table->string('text')->comment('内容');
+            $table->string('text')->nullable()->comment('内容');
             $table->date('day')->nullable()->comment('日付');
             $table->time('time')->comment('時間');
             $table->integer('week')->nullable()->comment('日:0  月:1  火:2  水:3  木:4  金:5  土:6');

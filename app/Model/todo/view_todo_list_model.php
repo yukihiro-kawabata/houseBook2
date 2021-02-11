@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Model\remind;
+namespace App\Model\todo;
 
-use App\Model\remind\remind_model;
+use App\Model\todo\todo_model;
 
-class view_remind_list_model extends remind_model
+class view_todo_list_model extends todo_model
 {
     /*
      * 一覧で使用するデータをまとめる
@@ -14,7 +14,7 @@ class view_remind_list_model extends remind_model
     {
         return [
             'view_week' => self::DAY_OF_WEEKS, // weeks 
-            'list'      => self::remindDao()->fetch_all_date(), // register data
+            'list'      => self::todoDao()->fetch_all_date(), // register data
         ];
     }
 }
