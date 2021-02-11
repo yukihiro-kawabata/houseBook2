@@ -18,19 +18,19 @@ class todo extends Model
     }
 
     // 全ての情報
-    public function fetch_all_date()
+    public function fetch_all_date($sort_col = 'id', $sort_order = 'DESC')
     {
         $sql  = "";
         $sql .= " SELECT * ";
         $sql .= " FROM $this->table ";
-        $sql .= " ORDER BY id DESC ";
+        $sql .= " ORDER BY $sort_col $sort_order ";
         
         $week_const = $this->get_const_week_array();
 
         $re = [];
         foreach(DB::select($sql) as $n => $data) {
-            $tmp = $data;
-            $tmp->week_name = array_key_exists($data->week, $week_const) ? $week_const[$data->week] : NULL;
+            $tmp = (array)$data;
+            $tmp['week_name'] = array_key_exists($data->week, $week_const) ? $week_const[$data->week] : NULL;
 
             $re[] = $tmp;
         }

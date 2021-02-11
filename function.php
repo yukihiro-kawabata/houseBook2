@@ -66,3 +66,48 @@ function replace_comma_for_type_integer(string $str) : int
 {
     return (int)preg_replace('/,|、|，|/', '', $str);
 }
+
+/** phpのdate関数のweekに対応する曜日 */
+function get_php_date_week_ja() : array
+{
+    $todo_model = new \App\Model\todo\todo_model();
+    return $todo_model::DAY_OF_WEEKS;
+}
+
+/**
+ * 今日からn年後までの日付全てを取得する
+ * @param int $next_year n年後
+ * @return array [yyyymmdd => ['day' => yyyymmdd, 'week_name' => '月曜'] ]
+ */
+function get_all_days(int $next_year = 1) : array
+{
+    $re = [];
+    for ($i = date('Ymd'); $i <= date('Ymd', strtotime("$next_year year")); $i++) {
+        $last_month = date('Ymd', strtotime('last day of ' . $i));
+
+        // もし、$last_month で上手く値が取得できない場合は再取得する
+        if ($last_month === '19700101') {
+            $next_day = $i + 1;
+            $last_month = date('Ymd', strtotime('last day of ' . $next_day));
+        }
+
+        if ($i > $last_month) {             
+            // 翌月を取得する。5の数字はテキトー
+            // $i = 2/29 の数字が入ると、php内部で3/1と認識されて翌月として4月が取得されてしまうため
+            $next_month = date('Ymd', strtotime('1 month', strtotime($i - 5)));
+
+            // 翌月の初日を設定する
+            $i = date('Ymd', strtotime('first day of ' . $next_month));
+
+            $i = $i - 1; // ループの部分で +1 されるので調整
+            continue;
+        }
+
+        $re[$i] = [
+            'day'       => (int)$i, 
+            'week'      => date('w', strtotime($i)),
+            'week_name' => get_php_date_week_ja()[date('w', strtotime($i))],
+        ];
+    }
+    return $re;
+}
