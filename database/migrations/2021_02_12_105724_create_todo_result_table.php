@@ -16,7 +16,7 @@ class CreateTodoResultTable extends Migration
         Schema::create('todo_result', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('todo_id')->comment('todoのID');
-            $table->integer('status')->comment('1:未完了 2:破棄 9:完了');
+            $table->integer('status')->default(1)->comment('1:未完了 2:破棄 9:完了');
             $table->integer('remind_total_count')->default(0)->comment('リマインド合計回数');
             $table->timestamps();
         });

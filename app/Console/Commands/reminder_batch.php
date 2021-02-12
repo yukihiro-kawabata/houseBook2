@@ -40,6 +40,11 @@ class reminder_batch extends Command
         return new todo();
     }
 
+    private static function todoResultDao() : todo
+    {
+        return new todo_result();
+    }
+
     /**
      * Execute the console command.
      *
@@ -60,5 +65,11 @@ class reminder_batch extends Command
     
             $slack_push_model->push_msg($msg);
         }
+
+        // todo_resultにデータ登録する
+        self::todoResultDao()->insert([
+            'todo_id' => $data->id,
+            'status' => 1,
+        ]);
     }
 }
