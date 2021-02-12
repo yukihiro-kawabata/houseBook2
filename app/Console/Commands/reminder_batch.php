@@ -4,7 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use App\db\remind;
+use App\db\todo;
+use App\db\todo_result;
 
 use App\Model\slack\slack_push_model;
 
@@ -34,9 +35,9 @@ class reminder_batch extends Command
         parent::__construct();
     }
 
-    private static function remindDao() : remind
+    private static function todoDao() : todo
     {
-        return new remind();
+        return new todo();
     }
 
     /**
@@ -50,36 +51,14 @@ class reminder_batch extends Command
 
         $slack_push_model = new slack_push_model();
         
-
-        foreach(self::remindDao()->fetch_remind_taget_data($time) as $n => $data) {
+        foreach(self::todoDao()->fetch_todo_taget_data($time) as $n => $data) {
             $msg  = "";
-            $msg .= "== リマインド ==" . PHP_EOL;
+            $msg .= "== ToDo ==" . PHP_EOL;
             $msg .= "$data->title" . PHP_EOL;
             $msg .= "----------------------------------" . PHP_EOL;
             $msg .= "$data->text" . PHP_EOL;
     
             $slack_push_model->push_msg($msg);
-
-            // 不要なデータは削除する
-            echo $this->delete_data($data);
         }
     }
-
-    /**
-     * 定期的にリマインドしない場合はデータを削除する
-     * @param object|array $data
-     * @return NULL|string
-     */
-    private function delete_data($data) : ?string
-    {
-        $re = NULL;
-
-        if (is_null($data->week)) {
-            self::remindDao()->where('id', $data->id)->delete();
-            $re = 'Deleted data of title: ' . $data->title;
-        }
-
-        return $re;
-    }
-
 }
