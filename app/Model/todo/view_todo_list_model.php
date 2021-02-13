@@ -37,13 +37,15 @@ class view_todo_list_model extends todo_model
 
             if (array_key_exists($day, $todo)) {
                 $result = $todo_result_col; // todo_resultテーブルのカラムを配列のkeyに補填
-                $jug_key = $n . $todo[$day]['time'];
-                if (array_key_exists($jug_key, $todo_result)) {
-                    $result = $todo_result[$jug_key];
+                
+                foreach ($todo[$day] as $todo_time => $todo_data) {
+                    // $jug_key = $n . $todo[$day]['time'];
+                    $jug_key = $n . $todo_time;
+                    if (array_key_exists($jug_key, $todo_result)) {
+                        $result = $todo_result[$jug_key];
+                    }
+                    $tmp['todo'][] =  array_merge($todo[$day][$todo_time], $result);
                 }
-                $tmp['todo'][] =  array_merge($todo[$day], $result);
-
-                // $tmp['todo'][] = $todo[$day];
             }
 
             if (array_key_exists($week, $todo)) {
@@ -70,7 +72,7 @@ class view_todo_list_model extends todo_model
         $re = [];
         foreach (self::todoDao()->fetch_all_date('time', 'ASC') as $n => $data) {
             if (! is_null($data['day'])) {
-                $re[preg_replace('/\-/', '', $data['day'])]  = $data; // ex). 2020-12-01 ---> 20201201 をkeyとする
+                $re[preg_replace('/\-/', '', $data['day'])][$data['time']]  = $data; // ex). 2020-12-01 ---> 20201201 をkeyとする
             }
 
             if (! is_null($data['week'])) {
