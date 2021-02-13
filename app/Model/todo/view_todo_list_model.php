@@ -85,6 +85,11 @@ class view_todo_list_model extends todo_model
     {
         $re = [];
         foreach (self::todo_resultDao()->fetch_all_date() as $n => $data) {
+
+            if ($data['status'] === 9) {
+                $data['todo_fixed_flg'] = 1;
+            }
+
             $re[str_replace('-', '', $data['todo_day']) . $data['todo_time']] = $data;
         }
         return $re;

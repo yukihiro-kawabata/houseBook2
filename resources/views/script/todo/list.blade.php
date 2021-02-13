@@ -81,10 +81,17 @@
     </div>
 
     @foreach ($view['list'] as $n => $data)
-      <div class="list-group mb-2">
-        <span class="badge bg-secondary view_day_badge">{{ preg_replace('/\d{4}(\d{2})(\d{2})/', '$1/$2', $data['day']) . '（' . $data['week_name'] . '）' }}</span>
+      <div class="list-group mb-2 {{ $data['day'] }}">
+        @if ((int)$data['day'] === (int)date('Ymd'))
+          <span class="badge bg-danger view_day_badge">
+        @else
+          <span class="badge bg-secondary view_day_badge">
+        @endif
+          {{ preg_replace('/\d{4}(\d{2})(\d{2})/', '$1/$2', $data['day']) . '（' . $data['week_name'] . '）' }}
+        </span>
         @foreach ($data['todo'] as $num => $todo)
-          <a href="javascript:void(0)" class="list-group-item list-group-item-action" aria-current="true" onclick="todoChangeModal('{{ json_encode($data) }}', '{{ $num }}')">
+          <a href="javascript:void(0)" class="list-group-item list-group-item-action {{ (array_key_exists('todo_fixed_flg', $todo)) ? 'todo_fixed_status' : '' }}"
+              aria-current="true" onclick="todoChangeModal('{{ json_encode($data) }}', '{{ $num }}')">
               <div class="d-flex w-100 justify-content-between">
                 <p class="mb-1">{{ $todo['title'] }}</p>
                 <small>{{ preg_replace('/\:\d{2}$/', '', $todo['time']) }}</small>
@@ -107,6 +114,10 @@
       margin-bottom: -10px;
       z-index: 10;
     }
+    .todo_fixed_status {
+      background-color: gainsboro;
+      color: #999;
+    }
     #my-modal {
       z-index: 11;
       position: fixed;
@@ -123,6 +134,10 @@
 </style>
 
 <script type="text/javascript">
+
+    <?php //// 今日の日付のところをデフォルトで表示させたい  ?>
+    window.scrollTo( 0, document.getElementsByClassName('{{ date("Ymd") }}')[0].getBoundingClientRect());
+
     <?php //// 登録ボタン  ?>
     function registBtn() {
         if (confirm("登録をしますか")) {
