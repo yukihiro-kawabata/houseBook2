@@ -9,21 +9,21 @@ use App\db\todo_result;
 
 use App\Model\slack\slack_push_model;
 
-class reminder_batch extends Command
+class reminder_todo_batch extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:reminder';
+    protected $signature = 'command:reminder_todo';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'リマインドを通知するバッチ';
+    protected $description = 'ToDoの未着手のものをリマインドを通知するバッチ';
 
     /**
      * Create a new command instance.
@@ -52,25 +52,23 @@ class reminder_batch extends Command
      */
     public function handle()
     {
-        $time = date('H:i');
-
         $slack_push_model = new slack_push_model();
         
-        foreach(self::todoDao()->fetch_todo_taget_data($time) as $n => $data) {
+        foreach(self::todoResultDao()->fetch_todo_not_yet() as $n => $data) {
             $msg  = "";
-            $msg .= "== ToDo ==" . PHP_EOL;
-            $msg .= "$data->title" . PHP_EOL;
-            $msg .= "$data->text" . PHP_EOL;
+            $msg .= "== ToDo(未) ==" . PHP_EOL;
+            $msg .= $data['title'] . PHP_EOL;
+            $msg .= $data['text'] . PHP_EOL;
             $msg .= "----------------------------------" . PHP_EOL;
     
             $slack_push_model->push_msg($msg);
 
             // todo_resultにデータ登録する
-            $todoResultDao = self::todoResultDao();
-            $todoResultDao->todo_id  = $data->id;
-            $todoResultDao->todo_day = date('Y-m-d');
-            $todoResultDao->todo_time = $data->time;
-            $todoResultDao->save();
+            self::todoResultDao()
+                ->where('id', $data['todo_result_id'])
+                ->update([
+                    'remind_total_count' => $data['remind_total_count'] + 1, // リマインド回数を加算
+                ]);
         }
     }
 }

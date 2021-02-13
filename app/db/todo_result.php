@@ -47,4 +47,28 @@ class todo_result extends Model
         return $re;
     }
 
+
+    // 未着手のToDoを取得する
+    // @param int $remind_total_count_limit リマインドn回以内のデータを取得する
+    public function fetch_todo_not_yet(int $remind_total_count_limit = 3) : array
+    {
+        $sql = "
+            SELECT
+                todo.*,
+                re.id as todo_result_id,
+                re.remind_total_count
+            FROM `todo_result` re
+            INNER JOIN `todo` todo ON todo.id = re.todo_id
+            WHERE 
+                `status` = 1 AND `remind_total_count` < $remind_total_count_limit
+        ";
+
+        $re = [];
+        foreach(DB::select($sql) as $n => $data) {
+            $re[] = (array)$data;
+        }
+
+        return $re;
+    }
+
 }
