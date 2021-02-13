@@ -47,7 +47,7 @@ Route::get('/todo/indexexecute', 'todo\todoController@indexexecute');
 Route::post('/todo/indexexecute', 'todo\todoController@indexexecute');
 // change todo result
 Route::get('/todo/result/updateexecute', 'todo\todoController@resultUpdateexecute');
-Route::get('/todo/result/updateexecute', 'todo\todoController@resultUpdateexecute');
+Route::post('/todo/result/updateexecute', 'todo\todoController@resultUpdateexecute');
 
 // mail list
 Route::get('/mail/import', 'mail\mailController@importAction');

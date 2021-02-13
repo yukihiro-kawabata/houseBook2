@@ -32,8 +32,14 @@ class update_todo_result_model extends todo_model
      */
     private function validate(array $data, array $todo) : bool
     {
+        // まだToDo実行日に達していないとデータが出来ていないので
+        // todo_result_id は無の状態で来る
+        if (!array_key_exists('todo_result_id', $todo)) {
+            return false;
+        }
+
         return (
-            $data['day'] === (int)str_replace('-', '', $todo['todo_day']) // todoの実行日が一致しているか
+            $data['day'] >= (int)str_replace('-', '', $todo['todo_day']) // todoの実行日が対象の日付より過去なのか
             && preg_replace('/(\d{2})\:(\d{2})\:(\d{2})/', '$1:$2', $todo['time']) === preg_replace('/.*(\d{2})\:(\d{2})\:(\d{2})/', '$1:$2', $todo['todo_result_created_at']) // todoの実行時間が一致しているか
         );
     }

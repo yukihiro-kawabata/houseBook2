@@ -72,7 +72,7 @@
         <button type="button" class="card-link btn btn-warning" onclick="todoChangeExecute(1);">未着手</button>
         <button type="button" class="card-link btn btn-primary"  onclick="todoChangeExecute(9);">完了</button>
 
-        <form method="GET" name="todoResultChangeForm" action="{{ url('/todo/result/updateexecute') }}">
+        <form method="POST" name="todoResultChangeForm" action="{{ url('/todo/result/updateexecute') }}">
           <input type="hidden" name="json" id="my-modal-input-json" value="">
           <input type="hidden" name="todo_num" id="my-modal-input-todo_num" value="">
           <input type="hidden" name="type" id="my-modal-input-type" value="">
