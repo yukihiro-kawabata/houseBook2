@@ -4,6 +4,7 @@ namespace App\Model\todo;
 
 use App\Model\common_model;
 
+use App\Model\slack\slack_push_model;
 use App\db\todo;
 use App\db\todo_result;
 
@@ -33,5 +34,10 @@ class todo_model extends common_model
     protected static function todo_resultDao() : todo_result
     {
         return new todo_result();
+    }
+
+    protected static function slack_push_model() : slack_push_model
+    {
+        return new slack_push_model();
     }
 }

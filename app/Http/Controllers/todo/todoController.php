@@ -5,6 +5,7 @@ namespace App\Http\Controllers\todo;
 use App\Http\Controllers\Controller;
 use Request;
 
+use App\Model\slack\slack_push_model;
 use App\Model\todo\view_todo_list_model;
 use App\Model\todo\update_todo_result_model;
 use App\db\todo;
@@ -30,6 +31,11 @@ class todoController extends Controller
         return new update_todo_result_model();
     }
 
+    private static function slack_push_model() : slack_push_model
+    {
+        return new slack_push_model();
+    }
+
     /**
      * リマンド一覧
      */
@@ -51,6 +57,13 @@ class todoController extends Controller
         $request = Request::all();
         $request['created_at'] = now();
         self::todoDao()->insert([0 => $request]);
+
+        // Slack通知する
+        $msg  = "ToDoが追加されました。" . PHP_EOL;
+        $msg .= "----------------------------------" . PHP_EOL;
+        $msg .= "タイトル：" . $request['title'] . PHP_EOL;
+        $msg .= "実行日時：" . $request['day'] . " " . $request['time'] . PHP_EOL;
+        self::slack_push_model()->push_msg($msg);
 
         return redirect(url('/todo/list'));
     }
