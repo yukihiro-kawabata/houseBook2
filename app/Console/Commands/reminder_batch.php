@@ -58,7 +58,7 @@ class reminder_batch extends Command
         
         foreach(self::todoDao()->fetch_todo_taget_data($time) as $n => $data) {
             $msg  = "";
-            $msg .= "== 下記の予定時間です ==" . PHP_EOL;
+            $msg .= "下記の予定時間です" . PHP_EOL;
             $msg .= "----------------------------------" . PHP_EOL;
             $msg .= "$data->title" . PHP_EOL;
             $msg .= "$data->text" . PHP_EOL;

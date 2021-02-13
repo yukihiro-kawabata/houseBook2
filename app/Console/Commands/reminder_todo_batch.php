@@ -56,7 +56,7 @@ class reminder_todo_batch extends Command
         
         foreach(self::todoResultDao()->fetch_todo_not_yet() as $n => $data) {
             $msg  = "";
-            $msg .= "== 下記を忘れてませんか？ ==" . PHP_EOL;
+            $msg .= "下記を忘れてませんか？" . PHP_EOL;
             $msg .= "----------------------------------" . PHP_EOL;
             $msg .= $data['title'] . PHP_EOL;
             $msg .= $data['text'] . PHP_EOL;
