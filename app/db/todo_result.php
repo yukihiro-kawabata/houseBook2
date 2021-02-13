@@ -48,9 +48,35 @@ class todo_result extends Model
     }
 
 
-    // 未着手のToDoを取得する
+    // 未着手のToDoを取得する（当日中のもの）
     // @param int $remind_total_count_limit リマインドn回以内のデータを取得する
     public function fetch_todo_not_yet(int $remind_total_count_limit = 3) : array
+    {
+        $today = date('Ymd');
+
+        $sql = "
+            SELECT
+                todo.*,
+                re.id as todo_result_id,
+                re.remind_total_count
+            FROM `todo_result` re
+            INNER JOIN `todo` todo ON todo.id = re.todo_id
+            WHERE 
+                `status` = 1 
+                AND `remind_total_count` < $remind_total_count_limit
+                AND `todo_day` = '$today'
+        ";
+
+        $re = [];
+        foreach(DB::select($sql) as $n => $data) {
+            $re[] = (array)$data;
+        }
+
+        return $re;
+    }
+
+    // 未着手のToDoを取得する（過去含めたもの）
+    public function fetch_todo_not_yet_bygones_day() : array
     {
         $sql = "
             SELECT
@@ -60,7 +86,7 @@ class todo_result extends Model
             FROM `todo_result` re
             INNER JOIN `todo` todo ON todo.id = re.todo_id
             WHERE 
-                `status` = 1 AND `remind_total_count` < $remind_total_count_limit
+                `status` = 1 
         ";
 
         $re = [];

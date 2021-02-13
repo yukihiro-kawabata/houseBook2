@@ -54,7 +54,16 @@ class reminder_todo_batch extends Command
     {
         $slack_push_model = new slack_push_model();
         
-        foreach(self::todoResultDao()->fetch_todo_not_yet() as $n => $data) {
+        // 当日のToDoの未着手のものを取得する
+        $today_todo = self::todoResultDao()->fetch_todo_not_yet();
+
+        // 過去で未着手のものは指定時間のみリマインドする
+        $bygones_day_todo = [];
+        if (in_array(date('H:i'), ['17:00', '20:00'], true)) {
+            $bygones_day_todo = self::todoResultDao()->fetch_todo_not_yet_bygones_day();
+        }
+
+        foreach(($today_todo + $bygones_day_todo) as $n => $data) {
             $msg  = "";
             $msg .= "下記を忘れてませんか？" . PHP_EOL;
             $msg .= "----------------------------------" . PHP_EOL;
