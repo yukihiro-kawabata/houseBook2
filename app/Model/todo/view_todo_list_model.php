@@ -36,9 +36,8 @@ class view_todo_list_model extends todo_model
             $week        = $data['week'];
 
             if (array_key_exists($day, $todo)) {
-                $result = $todo_result_col; // todo_resultテーブルのカラムを配列のkeyに補填
-                
                 foreach ($todo[$day] as $todo_time => $todo_data) {
+                    $result = $todo_result_col; // todo_resultテーブルのカラムを配列のkeyに補填
                     // $jug_key = $n . $todo[$day]['time'];
                     $jug_key = $n . $todo_time;
                     if (array_key_exists($jug_key, $todo_result)) {
