@@ -30,7 +30,7 @@ class update_todo_result_model extends todo_model
             $msg .= "----------------------------------" . PHP_EOL;
             $msg .= "タイトル：" . $todo['title'] . PHP_EOL;
             $msg .= "実行日時：" . $todo['day'] . " " . $todo['time'] . PHP_EOL;
-            $msg .= "ステータス：" . $todo['todo_result_status_name']   .PHP_EOL;
+            $msg .= "ステータス：" . self::TODO_RESULT_STATUS[$param['type']]   .PHP_EOL;
             
             self::slack_push_model()->push_msg($msg);
     }
