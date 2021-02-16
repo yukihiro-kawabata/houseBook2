@@ -14,10 +14,11 @@ class import_mail_model extends cashModel
     ];
 
     const devit_kamoku_id_by_pay_place = [
-        'LIFE CORPORATION' => 64, // ライフ、食費
+        'LIFE CORPORATION'       => 64, // ライフ、食費
         'CHISAN MARCHE NAGAHARA' => 64, // マルシェ、食費
-        'AMAZON CO JP'     => 49, // アマゾン、日用品
-        'AEON5011905134102' => 49, // ウエルシア、日用品
+        'AMAZON CO JP'           => 49, // アマゾン、日用品
+        'AEON5011905134102'      => 49, // ウエルシア、日用品
+        'TOKYU STORE'            => 64, // 東急ストア、食費
     ];
 
     private static function fetch_gmail_model() : fetch_gmail_model
