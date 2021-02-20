@@ -55,6 +55,7 @@ class todoController extends Controller
     public function indexexecute()
     {
         $request = Request::all();
+        $request['time'] = $request['time'] . ':' .sprintf('%02d', rand(0,60));
         $request['created_at'] = now();
         self::todoDao()->insert([0 => $request]);
 

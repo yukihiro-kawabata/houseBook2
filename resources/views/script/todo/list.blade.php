@@ -25,8 +25,13 @@
               </div>
 
               <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-secondary m-1" onclick="document.getElementById('day_area').classList.toggle('display_off');">日付指定</button>
-                <button type="button" class="btn btn-secondary m-1" onclick="document.getElementById('week_area').classList.toggle('display_off');">曜日指定</button>
+                <button type="button" class="btn btn-secondary m-1" 
+                  onclick="document.getElementById('day_area').classList.toggle('display_off');
+                          document.getElementById('day').focus();">日付指定</button>
+                <button type="button" class="btn btn-secondary m-1" 
+                  onclick="document.getElementById('week_area').classList.toggle('display_off');
+                          document.getElementById('week').focus();
+                  ">曜日指定</button>
               </div>
 
               <div id="day_area" class="row mb-3 display_off">

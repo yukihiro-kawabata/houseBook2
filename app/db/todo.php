@@ -54,7 +54,7 @@ class todo extends Model
         $sql .= "       day = '" . date('Y-m-d') . "'";
         $sql .= "   OR week = '" . date('w') . "'";
         $sql .= "      ) ";
-        $sql .= "   AND time = '" . $time . "'";
+        $sql .= "   AND time LIKE '" . $time . "%'";
         return DB::select($sql);
     }
 }
