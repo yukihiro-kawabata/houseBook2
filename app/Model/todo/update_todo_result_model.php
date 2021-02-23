@@ -16,6 +16,17 @@ class update_todo_result_model extends todo_model
         $todo = $data['todo'][$param['todo_num']];
 
         if (! $this->validate($data, $todo)) {
+
+            // 未来の単発ToDoは物理的に削除するようにする
+            if ((string)array_flip(self::TODO_RESULT_STATUS)['削除'] === $param['type'] && is_null($todo['week'])) {
+                self::todoDao()
+                    ->where([
+                        ['title', $todo['title']],
+                        ['day', $todo['day']],
+                        ['time', $todo['time']],
+                    ])
+                    ->delete();
+            }
             return;
         }
 
