@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Request;
 
 use App\Model\todo\view_todo_list_model;
+use App\Model\todo\update_todo_result_model;
 use App\db\todo;
 
 /**
@@ -22,6 +23,11 @@ class todoController extends Controller
     private static function view_todo_list_model() : view_todo_list_model
     {
         return new view_todo_list_model();
+    }
+
+    private static function update_todo_result_model() : update_todo_result_model
+    {
+        return new update_todo_result_model();
     }
 
     /**
@@ -45,6 +51,17 @@ class todoController extends Controller
         $request = Request::all();
         $request['created_at'] = now();
         self::todoDao()->insert([0 => $request]);
+
+        return redirect(url('/todo/list'));
+    }
+
+    /**
+     * todoのステータス変更
+     */
+    public function resultUpdateexecute()
+    {
+        $request = Request::all();
+        self::update_todo_result_model()->update_todo_result($request);
 
         return redirect(url('/todo/list'));
     }

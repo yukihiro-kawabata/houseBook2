@@ -17,6 +17,12 @@ class todo extends Model
         return $todo_model::DAY_OF_WEEKS;
     }
 
+    private function get_const_todo_result_status_array()
+    {
+        $todo_model = new \App\Model\todo\todo_model();
+        return $todo_model::TODO_RESULT_STATUS;
+    }
+
     // 全ての情報
     public function fetch_all_date($sort_col = 'id', $sort_order = 'DESC')
     {
@@ -34,6 +40,7 @@ class todo extends Model
 
             $re[] = $tmp;
         }
+
         return $re;
     }
 

@@ -82,7 +82,7 @@ function get_php_date_week_ja() : array
 function get_all_days(int $next_year = 1) : array
 {
     $re = [];
-    for ($i = date('Ymd'); $i <= date('Ymd', strtotime("$next_year year")); $i++) {
+    for ($i = date('Ymd', strtotime("-1 month")); $i <= date('Ymd', strtotime("$next_year year")); $i++) {
         $last_month = date('Ymd', strtotime('last day of ' . $i));
 
         // もし、$last_month で上手く値が取得できない場合は再取得する

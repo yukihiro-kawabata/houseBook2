@@ -17,6 +17,8 @@ class CreateTodoResultTable extends Migration
             $table->bigIncrements('id');
             $table->integer('todo_id')->comment('todoのID');
             $table->integer('status')->default(1)->comment('1:未完了 2:破棄 9:完了');
+            $table->date('todo_day')->nullable()->comment('ToDo実行日');
+            $table->time('todo_time')->comment('時間');
             $table->integer('remind_total_count')->default(0)->comment('リマインド合計回数');
             $table->timestamps();
         });

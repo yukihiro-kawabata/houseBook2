@@ -62,17 +62,35 @@
       </details>
     </div>
 
-    @foreach ($view['list'] as $n => $data)
+    <div class="card shadow-lg display_off" id="my-modal">
+      <img src="{{ asset('/image/pengin_tonbo.gif') }}" class="card-img-top my-modal-image" onclick="document.getElementById('my-modal').classList.add('display_off');">
+      <div class="card-body">
+        <h5 class="card-title">ToDoのステータス変更</h5>
+        <h6 class="card-subtitle mb-2 text-muted" id="my-modal-subtitile">Non title</h6>
+        <p class="card-text" id="my-modal-text">何も選択されていません</p>
+        <button type="button" class="card-link btn btn-danger" onclick="todoChangeExecute(2);">削除</button>
+        <button type="button" class="card-link btn btn-warning" onclick="todoChangeExecute(1);">未着手</button>
+        <button type="button" class="card-link btn btn-primary"  onclick="todoChangeExecute(9);">完了</button>
 
+        <form method="GET" name="todoResultChangeForm" action="{{ url('/todo/result/updateexecute') }}">
+          <input type="hidden" name="json" id="my-modal-input-json" value="">
+          <input type="hidden" name="todo_num" id="my-modal-input-todo_num" value="">
+          <input type="hidden" name="type" id="my-modal-input-type" value="">
+        </form>
+      </div>
+    </div>
+
+    @foreach ($view['list'] as $n => $data)
       <div class="list-group mb-2">
         <span class="badge bg-secondary view_day_badge">{{ preg_replace('/\d{4}(\d{2})(\d{2})/', '$1/$2', $data['day']) . '（' . $data['week_name'] . '）' }}</span>
         @foreach ($data['todo'] as $num => $todo)
-          <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+          <a href="javascript:void(0)" class="list-group-item list-group-item-action" aria-current="true" onclick="todoChangeModal('{{ json_encode($data) }}', '{{ $num }}')">
               <div class="d-flex w-100 justify-content-between">
                 <p class="mb-1">{{ $todo['title'] }}</p>
                 <small>{{ preg_replace('/\:\d{2}$/', '', $todo['time']) }}</small>
               </div>
               <small>{{ $todo['text'] }}</small>
+              <small class="float-right">{{ $todo['todo_result_status_name'] }}</small>
           </a>
         @endforeach
       </div>
@@ -89,6 +107,19 @@
       margin-bottom: -10px;
       z-index: 10;
     }
+    #my-modal {
+      z-index: 11;
+      position: fixed;
+      top: 40%;
+      width: 80%;
+      margin: 0 5%;
+    }
+    .my-modal-image {
+      width: 40px;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+    }
 </style>
 
 <script type="text/javascript">
@@ -99,6 +130,32 @@
             document.regist_form.submit();
         }
     }
+
+    <?php /////// ToDo変更モーダル /////// ?>
+    function todoChangeModal(json, todo_num) {
+      const date = JSON.parse(json);
+      const todo = date.todo[todo_num];
+      
+      let todo_text = todo.text;
+      if (!todo_text) {
+        todo_text = ''; <?php /// NULLという文字を画面表示したくない ?>
+      }
+
+      document.getElementById('my-modal-input-json').value = json;
+      document.getElementById('my-modal-input-todo_num').value = todo_num;
+
+      document.getElementById('my-modal-subtitile').innerHTML = String(date.day).replace(/(\d{4})(\d{2})(\d{2})/i, '$1-$2-$3');
+      document.getElementById('my-modal-text').innerHTML = todo.title + '<br /> ' + todo_text;
+
+      document.getElementById('my-modal').classList.remove('display_off');
+    }
+
+    <?php ///////////// ToDo変更処理 ///////////// ?>
+    function todoChangeExecute(type_num) {
+      document.getElementById('my-modal-input-type').value = type_num;
+      document.todoResultChangeForm.submit();
+    }
+
 </script>
 
 @endsection

@@ -40,7 +40,7 @@ class reminder_batch extends Command
         return new todo();
     }
 
-    private static function todoResultDao() : todo
+    private static function todoResultDao() : todo_result
     {
         return new todo_result();
     }
@@ -64,12 +64,13 @@ class reminder_batch extends Command
             $msg .= "$data->text" . PHP_EOL;
     
             $slack_push_model->push_msg($msg);
-        }
 
-        // todo_resultにデータ登録する
-        self::todoResultDao()->insert([
-            'todo_id' => $data->id,
-            'status' => 1,
-        ]);
+            // todo_resultにデータ登録する
+            $todoResultDao = self::todoResultDao();
+            $todoResultDao->todo_id  = $data->id;
+            $todoResultDao->todo_day = date('Y-m-d');
+            $todoResultDao->todo_time = $data->time;
+            $todoResultDao->save();
+        }
     }
 }

@@ -25,6 +25,8 @@ class view_todo_list_model extends todo_model
     {
         // todoに登録されているデータを取得する
         $todo = $this->fetch_todo_data();
+        $todo_result = $this->fetch_todo_result_data();
+        $todo_result_col = array_flip(self::todo_resultDao()->getColums()) + ['todo_result_status_name' => ''];
 
         $re = [];
         foreach (get_all_days() as $n => $data) {
@@ -34,11 +36,24 @@ class view_todo_list_model extends todo_model
             $week        = $data['week'];
 
             if (array_key_exists($day, $todo)) {
-                $tmp['todo'][] = $todo[$day];
+                $result = $todo_result_col; // todo_resultテーブルのカラムを配列のkeyに補填
+                $jug_key = $n . $todo[$day]['time'];
+                if (array_key_exists($jug_key, $todo_result)) {
+                    $result = $todo_result[$jug_key];
+                }
+                $tmp['todo'][] =  array_merge($todo[$day], $result);
+
+                // $tmp['todo'][] = $todo[$day];
             }
 
             if (array_key_exists($week, $todo)) {
-                $tmp['todo'][] =  $todo[$week];
+                // 定期的なToDoの場合、過去のtodo_resultのステータスが未来に影響を与えるので調整する
+                $result = $todo_result_col; // todo_resultテーブルのカラムを配列のkeyに補填
+                $jug_key = $n . $todo[$week]['time'];
+                if (array_key_exists($jug_key, $todo_result)) {
+                    $result = $todo_result[$jug_key];
+                }
+                $tmp['todo'][] =  array_merge($todo[$week], $result);
             }
 
             if (!empty($tmp['todo'])) {
@@ -61,6 +76,16 @@ class view_todo_list_model extends todo_model
             if (! is_null($data['week'])) {
                 $re[$data['week']] = $data;
             }
+        }
+        return $re;
+    }
+
+    /** todo_resultに登録されているデータを取得する */
+    private function fetch_todo_result_data() : array
+    {
+        $re = [];
+        foreach (self::todo_resultDao()->fetch_all_date() as $n => $data) {
+            $re[str_replace('-', '', $data['todo_day']) . $data['todo_time']] = $data;
         }
         return $re;
     }
