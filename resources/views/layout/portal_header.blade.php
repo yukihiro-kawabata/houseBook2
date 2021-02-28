@@ -47,6 +47,7 @@
                         <li><a href="{{ url('/kamoku/list') }}" style="color:#fff;">科目一覧</a></li>
                         <li><a href="{{ url('/todo/list') }}" style="color:#fff;">ToDo</a></li>
                         <li><a href="{{ url('/mail/import') }}" style="color:#fff;">メール取込</a></li>
+                        <li><a href="{{ url('/memo/list') }}" style="color:#fff;">メモ帳</a></li>
                     </ul>
                 </div>
             </div>

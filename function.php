@@ -111,3 +111,16 @@ function get_all_days(int $next_year = 1) : array
     }
     return $re;
 }
+
+/**
+ * laravelの標準装備でデータ取得すると
+ * オブジェクト型と配列型が混ざるので全て配列型に入れ直す
+ */
+function put_laravel_db_array($param) : array
+{
+    $re = [];
+    foreach ($param as $num => $data) {
+        $re[] = (array)$data;
+    }
+    return $re;
+}

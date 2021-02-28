@@ -53,3 +53,10 @@ Route::post('/todo/result/updateexecute', 'todo\todoController@resultUpdateexecu
 Route::get('/mail/import', 'mail\mailController@importAction');
 // register cash list from mail
 Route::get('/mail/importexecute', 'mail\mailController@importexecute');
+
+// memo register
+Route::get('/memo/indexexecute', 'memo\memoController@indexexecute');
+Route::post('/memo/indexexecute', 'memo\memoController@indexexecute');
+// memo list
+Route::get('/memo/list', 'memo\memoController@listAction');
+
