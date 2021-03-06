@@ -10,7 +10,7 @@ use App\db\cash;
 class cashModel extends common_model
 {
     /** デビットカードの使用限度額 */
-    const DEVIT_DEADLINE_AMOUNT = 70 * 1000;
+    const DEVIT_DEADLINE_AMOUNT = 80 * 1000;
     /** デビットカードの使用ユーザー名 */
     const DEVIT_NAME = 'devit';
 
