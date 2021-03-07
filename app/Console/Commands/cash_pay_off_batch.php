@@ -57,7 +57,7 @@ class cash_pay_off_batch extends Command
             'text'  => $msg_body,
             'day'   => "$year-$month-01",
             'week'  => NULL,
-            'time'  => '20:00:00',
+            'time'  => '20:00',
         ];
         $register_todo_model = new register_todo_model();
         $register_todo_model->post_data($register_todo);
