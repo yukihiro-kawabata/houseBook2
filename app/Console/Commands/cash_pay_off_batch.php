@@ -54,8 +54,8 @@ class cash_pay_off_batch extends Command
         // ToDoに登録する
         $register_todo = [
             'title' => $month.'月末精算',
-            'text'  => $msg_body,
-            'day'   => "$year-$month-01",
+            'text'  => NULL,
+            'day'   => "$year-".date("m")."-01",
             'week'  => NULL,
             'time'  => '20:00',
         ];
