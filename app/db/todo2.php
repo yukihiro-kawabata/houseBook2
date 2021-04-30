@@ -54,7 +54,8 @@ class todo2 extends Model
         $sql .= " SELECT * ";
         $sql .= " FROM $this->table ";
         $sql .= " WHERE ";
-        $sql .= "   day = '" . date('Y-m-d') . "'";
+        $sql .= "   status = 1 ";
+        $sql .= "   AND day = '" . date('Y-m-d') . "'";
         $sql .= "   AND time LIKE '" . $time . "%'";
         return DB::select($sql);
     }
