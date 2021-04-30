@@ -37,7 +37,7 @@
               <div id="day_area" class="row mb-3 display_off">
                   <label for="day" class="col-sm-2 col-form-label">日付指定</label>
                   <div class="col-sm-10">
-                      <input type="date" class="form-control" id="day" name="day">
+                    <input type="date" class="form-control" id="day" name="day" value='{{ date('Y-m-d') }}'>
                   </div>
               </div>
               <div id="week_area" class="row mb-3 display_off">
@@ -55,7 +55,7 @@
               <div class="row mb-3">
                   <label for="time" class="col-sm-2 col-form-label">時間</label>
                   <div class="col-sm-10">
-                      <input type="time" class="form-control" id="time" name="time" value="09:00">
+                      <input type="time" class="form-control" id="time" name="time" value="18:00">
                   </div>
               </div>
 
@@ -78,33 +78,33 @@
         <button type="button" class="card-link btn btn-primary"  onclick="todoChangeExecute(9);">完了</button>
 
         <form method="POST" name="todoResultChangeForm" action="{{ url('/todo/result/updateexecute') }}">
-          <input type="hidden" name="json" id="my-modal-input-json" value="">
-          <input type="hidden" name="todo_num" id="my-modal-input-todo_num" value="">
-          <input type="hidden" name="type" id="my-modal-input-type" value="">
+          <input type="hidden" name="id" id="my-modal-input-todo-id" value="">
+          <input type="hidden" name="title" id="my-modal-input-todo-title" value="">
+          <input type="hidden" name="day" id="my-modal-input-todo-day" value="">
+          <input type="hidden" name="status" id="my-modal-input-todo-status" value="">
         </form>
       </div>
     </div>
 
     @foreach ($view['list'] as $n => $data)
-      <div class="list-group mb-2 {{ $data['day'] }}">
-        @if ((int)$data['day'] === (int)date('Ymd'))
+      <div class="list-group mb-2">
+        @if ((int)preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '$1$2$3', $data['day']) === (int)date('Ymd'))
           <span class="badge bg-danger view_day_badge">
         @else
           <span class="badge bg-secondary view_day_badge">
         @endif
-          {{ preg_replace('/\d{4}(\d{2})(\d{2})/', '$1/$2', $data['day']) . '（' . $data['week_name'] . '）' }}
+          {{ preg_replace('/(\d{4})-(\d{2})-(\d{2})/', '$2/$3', $data['day']) . '（' . $data['week_name'] . '）' }}
         </span>
-        @foreach ($data['todo'] as $num => $todo)
-          <a href="javascript:void(0)" class="list-group-item list-group-item-action {{ (array_key_exists('todo_fixed_flg', $todo)) ? 'todo_fixed_status' : '' }}"
-              aria-current="true" onclick="todoChangeModal('{{ json_encode($data) }}', '{{ $num }}')">
-              <div class="d-flex w-100 justify-content-between">
-                <p class="mb-1">{{ $todo['title'] }}</p>
-                <small>{{ preg_replace('/\:\d{2}$/', '', $todo['time']) }}</small>
-              </div>
-              <small>{{ $todo['text'] }}</small>
-              <small class="float-right">{{ $todo['todo_result_status_name'] }}</small>
-          </a>
-        @endforeach
+
+        <a href="javascript:void(0)" class="list-group-item list-group-item-action {{ (array_key_exists('todo_fixed_flg', $data)) ? 'todo_fixed_status' : '' }}"
+            aria-current="true" onclick="todoChangeModal('{{ $data['id'] }}', '{{ $data['title'] }}', '{{ $data['day'] }}')">
+            <div class="d-flex w-100 justify-content-between">
+              <p class="mb-1">{{ $data['title'] }}</p>
+              <small>{{ preg_replace('/\:\d{2}$/', '', $data['time']) }}</small>
+            </div>
+            <small>{!! nl2br($data['text']) !!}</small>
+            <small class="float-right">{{ $data['status_name'] }}</small>
+        </a>
       </div>
     @endforeach
 
@@ -140,9 +140,6 @@
 
 <script type="text/javascript">
 
-    <?php //// 今日の日付のところをデフォルトで表示させたい  ?>
-    window.scrollTo( 0, document.getElementsByClassName('{{ date("Ymd") }}')[0].getBoundingClientRect());
-
     <?php //// 登録ボタン  ?>
     function registBtn() {
         if (confirm("登録をしますか")) {
@@ -152,27 +149,21 @@
     }
 
     <?php /////// ToDo変更モーダル /////// ?>
-    function todoChangeModal(json, todo_num) {
-      const date = JSON.parse(json);
-      const todo = date.todo[todo_num];
-      
-      let todo_text = todo.text;
-      if (!todo_text) {
-        todo_text = ''; <?php /// NULLという文字を画面表示したくない ?>
-      }
+    function todoChangeModal(todo_id, title, day) {
 
-      document.getElementById('my-modal-input-json').value = json;
-      document.getElementById('my-modal-input-todo_num').value = todo_num;
+      document.getElementById('my-modal-input-todo-id').value    = todo_id;
+      document.getElementById('my-modal-input-todo-day').value   = day;
+      document.getElementById('my-modal-input-todo-title').value = title;
 
-      document.getElementById('my-modal-subtitile').innerHTML = String(date.day).replace(/(\d{4})(\d{2})(\d{2})/i, '$1-$2-$3');
-      document.getElementById('my-modal-text').innerHTML = todo.title + '<br /> ' + todo_text;
+      document.getElementById('my-modal-subtitile').innerHTML = day;
+      document.getElementById('my-modal-text').innerHTML      = title;
 
       document.getElementById('my-modal').classList.remove('display_off');
     }
 
     <?php ///////////// ToDo変更処理 ///////////// ?>
-    function todoChangeExecute(type_num) {
-      document.getElementById('my-modal-input-type').value = type_num;
+    function todoChangeExecute(status) {
+      document.getElementById('my-modal-input-todo-status').value = status;
       document.todoResultChangeForm.submit();
     }
 

@@ -124,3 +124,12 @@ function put_laravel_db_array($param) : array
     }
     return $re;
 }
+
+/**
+ * ランダムな文字列を生成する
+ * @url https://qiita.com/suin/items/c958bcca90262467f2c0
+ */
+function random(int $length = 8)
+{
+    return substr(bin2hex(random_bytes($length)), 0, $length);
+}

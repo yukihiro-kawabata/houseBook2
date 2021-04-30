@@ -10,6 +10,10 @@ use App\Model\todo\view_todo_list_model;
 use App\Model\todo\update_todo_result_model;
 use App\db\todo;
 
+use App\Model\todo2\view\view_todo2_list_model;
+use App\Model\todo2\register\register_todo2_model;
+use App\Model\todo2\update\update_todo2_model;
+
 /**
  * リマインド系のController
  */
@@ -36,6 +40,21 @@ class todoController extends Controller
         return new slack_push_model();
     }
 
+    private static function register_todo2_model() : register_todo2_model
+    {
+        return new register_todo2_model();
+    }
+
+    private static function view_todo2_list_model() : view_todo2_list_model
+    {
+        return new view_todo2_list_model();
+    }
+
+    private static function update_todo2_model() : update_todo2_model
+    {
+        return new update_todo2_model();
+    }
+
     /**
      * リマンド一覧
      */
@@ -44,7 +63,7 @@ class todoController extends Controller
         $request = Request::all();
 
         return view('script.todo.list')->with([
-            "view" => self::view_todo_list_model()->view_list(),
+            "view" => self::view_todo2_list_model()->view_list(),
             "request" => $request,
         ]);
     }
@@ -54,18 +73,7 @@ class todoController extends Controller
      */
     public function indexexecute()
     {
-        $request = Request::all();
-        $request['time'] = $request['time'] . ':' .sprintf('%02d', rand(0,60));
-        $request['created_at'] = now();
-        self::todoDao()->insert([0 => $request]);
-
-        // Slack通知する
-        $msg  = "ToDoが追加されました。" . PHP_EOL;
-        $msg .= "----------------------------------" . PHP_EOL;
-        $msg .= "タイトル：" . $request['title'] . PHP_EOL;
-        $msg .= "実行日時：" . $request['day'] . " " . $request['time'] . PHP_EOL;
-        self::slack_push_model()->push_msg($msg);
-
+        self::register_todo2_model()->register_data($request = Request::all());
         return redirect(url('/todo/list'));
     }
 
@@ -74,8 +82,7 @@ class todoController extends Controller
      */
     public function resultUpdateexecute()
     {
-        $request = Request::all();
-        self::update_todo_result_model()->update_todo_result($request);
+        self::update_todo2_model()->update_todo_result($request = Request::all());
 
         return redirect(url('/todo/list'));
     }

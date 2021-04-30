@@ -10,7 +10,7 @@ class import_mail_model extends cashModel
     /** id => 件名。 idはここのファイル上のみ有効 */
     const import_mail_subject = [
         0 => 'りそなデビットカードご利用およびご利用代金引落しのご連絡',
-        1 => '【Times CAR SHARE】返却証'
+        1 => '【Times CAR】返却証'
     ];
 
     const devit_kamoku_id_by_pay_place = [
@@ -18,7 +18,9 @@ class import_mail_model extends cashModel
         'CHISAN MARCHE NAGAHARA' => 64, // マルシェ、食費
         'AMAZON CO JP'           => 49, // アマゾン、日用品
         'AEON5011905134102'      => 49, // ウエルシア、日用品
+        'AEON5011905134001'      => 49, // ウエルシア、日用品
         'TOKYU STORE'            => 64, // 東急ストア、食費
+        'MYBASKET KAMIIKEDAI'    => 64, // まいばすけっと、食費
     ];
 
     private static function fetch_gmail_model() : fetch_gmail_model

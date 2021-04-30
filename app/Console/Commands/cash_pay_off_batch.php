@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 
 use App\Model\cash\cash_batch_model;
-use App\Model\todo\register_todo_model;
+use App\Model\todo2\register\register_todo2_batch_model;
 use App\Model\slack\slack_push_model;
 
 class cash_pay_off_batch extends Command
@@ -54,13 +54,13 @@ class cash_pay_off_batch extends Command
         // ToDoに登録する
         $register_todo = [
             'title' => $month.'月末精算',
-            'text'  => NULL,
+            'text'  => $msg,
             'day'   => "$year-".date("m")."-01",
             'week'  => NULL,
             'time'  => '20:00',
         ];
-        $register_todo_model = new register_todo_model();
-        $register_todo_model->post_data($register_todo);
+        $register_todo2_batch_model = new register_todo2_batch_model();
+        $register_todo2_batch_model->post_data($register_todo);
 
         // Slack通知
         $slack_push_model = new slack_push_model();

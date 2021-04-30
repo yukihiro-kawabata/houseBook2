@@ -4,8 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use App\db\todo;
-use App\db\todo_result;
+use App\db\todo2;
 
 use App\Model\slack\slack_push_model;
 
@@ -35,14 +34,9 @@ class reminder_todo_batch extends Command
         parent::__construct();
     }
 
-    private static function todoDao() : todo
+    private static function todo2Dao() : todo2
     {
-        return new todo();
-    }
-
-    private static function todoResultDao() : todo_result
-    {
-        return new todo_result();
+        return new todo2();
     }
 
     /**
@@ -54,16 +48,18 @@ class reminder_todo_batch extends Command
     {
         $slack_push_model = new slack_push_model();
         
-        // 当日のToDoの未着手のものを取得する
-        $today_todo = self::todoResultDao()->fetch_todo_not_yet();
-
-        // 過去で未着手のものは指定時間のみリマインドする
-        $bygones_day_todo = [];
-        if (in_array(date('H:i'), ['17:00', '20:00'], true)) {
-            $bygones_day_todo = self::todoResultDao()->fetch_todo_not_yet_bygones_day();
+        for ($i = 9; $i <= 21; $i++) {
+            $time[sprintf('%02d', $i).':00'] = $i;
         }
 
-        foreach(($today_todo + $bygones_day_todo) as $n => $data) {
+        // if (! array_key_exists(date('H:i'), $time)) {
+        //     exit('リマインド時間の対象外です');
+        // }
+
+        // ToDoの未着手のものを取得する
+        $today_todo = self::todo2Dao()->fetch_todo_not_yet();
+
+        foreach($today_todo as $n => $data) {
             $msg  = "";
             $msg .= "下記を忘れてませんか？" . PHP_EOL;
             $msg .= "----------------------------------" . PHP_EOL;
@@ -72,12 +68,17 @@ class reminder_todo_batch extends Command
     
             $slack_push_model->push_msg($msg);
 
+            // 大量のりマインドを防ぐため
+            if ($n >= 10) {
+                break;
+            }
+
             // todo_resultにデータ登録する
-            self::todoResultDao()
-                ->where('id', $data['todo_result_id'])
-                ->update([
-                    'remind_total_count' => $data['remind_total_count'] + 1, // リマインド回数を加算
-                ]);
+            self::todo2Dao()
+            ->where('id', $data['id'])
+            ->update([
+                'remind_total_count' => $data['remind_total_count'] + 1, // リマインド回数を加算
+            ]);
         }
     }
 }
