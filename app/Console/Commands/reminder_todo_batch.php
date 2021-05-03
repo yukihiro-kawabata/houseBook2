@@ -48,13 +48,13 @@ class reminder_todo_batch extends Command
     {
         $slack_push_model = new slack_push_model();
         
-        for ($i = 9; $i <= 21; $i++) {
-            $time[sprintf('%02d', $i).':00'] = $i;
-        }
-
-        // if (! array_key_exists(date('H:i'), $time)) {
-        //     exit('リマインド時間の対象外です');
+        // for ($i = 9; $i <= 21; $i++) {
+        //     $time[sprintf('%02d', $i).':00'] = $i;
         // }
+
+        if (! array_key_exists(date('H:i'), ['17:00' => 17, '20:00' => 20])) {
+            exit('リマインド時間の対象外です');
+        }
 
         // ToDoの未着手のものを取得する
         $today_todo = self::todo2Dao()->fetch_todo_not_yet();
@@ -65,6 +65,8 @@ class reminder_todo_batch extends Command
             $msg .= "----------------------------------" . PHP_EOL;
             $msg .= $data['title'] . PHP_EOL;
             $msg .= $data['text'] . PHP_EOL;
+            $msg .= '↓↓完了にする↓↓' . PHP_EOL;
+            $msg .= "http://192.168.10.109/todo/result/updateexecute?id=".$data['id']."&title=".$data['title']."&status=9&day=".$data['day'] . PHP_EOL;
     
             $slack_push_model->push_msg($msg);
 

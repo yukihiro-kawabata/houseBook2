@@ -36,7 +36,7 @@ class register_todo2_batch_model extends todo2_model
         curl_setopt($curl,CURLOPT_COOKIEFILE,     'tmp');
         curl_setopt($curl,CURLOPT_FOLLOWLOCATION, TRUE); // Locationヘッダを追跡
         
-        $output = curl_exec($curl);
+        $output = curl_exec($curl); 
     }
 
 }

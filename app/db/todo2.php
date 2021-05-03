@@ -72,11 +72,8 @@ class todo2 extends Model
             FROM $this->table
             WHERE 
                 `status` = 1 
-                AND `remind_total_count` < $remind_total_count_limit
-                AND `day` <= '$today'
-                AND `time` <= '$time'
-                
-        ";
+                AND `day` < '$today'
+        "; // AND `remind_total_count` < $remind_total_count_limit
 
         $re = [];
         foreach(DB::select($sql) as $n => $data) {

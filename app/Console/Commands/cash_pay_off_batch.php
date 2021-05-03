@@ -56,7 +56,7 @@ class cash_pay_off_batch extends Command
             'title' => $month.'月末精算',
             'text'  => $msg,
             'day'   => "$year-".date("m")."-01",
-            'week'  => NULL,
+            'week'  => '',
             'time'  => '20:00',
         ];
         $register_todo2_batch_model = new register_todo2_batch_model();
