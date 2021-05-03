@@ -32,8 +32,8 @@
             
         </details>
     </ul>
-
     <hr style="height: 10px;"></hr>
+
     
     <ul class="nav nav-tabs" style="font-size: 12px;">
         @foreach ($userDatas as $name)
@@ -71,9 +71,9 @@
             <tr>
                 <th scope="col" style="width: 75px;">名前</th>
                 <th scope="col" style="width: 50px;">金額</th>
-                <th scope="col" style="width: 95px;">科目</th>
+                <th scope="col" style="width: 105px;">科目</th>
+                <th scope="col" style="width: 35px;" class="text-right">精算</th>
                 <th scope="col">概要</th>
-                <th scope="col" class="text-right">月末精算</th>
                 <th scope="col" style="width: 80px;">発生日</th>
                 <th scope="col" style="width: 80px;"></th>
             </tr>
@@ -85,8 +85,8 @@
                         <td><span class="circle {{ $detail->name }}"></span>{{ $detail->name }}</td>
                         <td>{{ number_format((int)$detail->price) }}</td>
                         <td>{{ $detail->tag }}</td>
+                        <td class="text-center"><span class="circle {{ empty($detail->half_flg_str) ? NULL : 'bg-secondary' }}"></span></td>
                         <td>{{ $detail->comment }}</td>
-                        <td class="text-right">{{ $detail->half_flg_str }}</td>
                         <td>{{ $detail->date }}</td>
                         <td class="text-center"><button type="button" class="button_cumstom" onclick="deleteBtn('{{ $detail->id }}', '{{ $detail->name }}', '{{ $detail->price }}', '{{ $detail->tag }}', '{{ $detail->date }}');">削除</button></td>
                     </tr>
