@@ -56,6 +56,8 @@ class reminder_batch extends Command
             $msg .= "----------------------------------" . PHP_EOL;
             $msg .= "$data->title" . PHP_EOL;
             $msg .= "$data->text" . PHP_EOL;
+            $msg .= '↓↓完了にする↓↓' . PHP_EOL;
+            $msg .= "http://192.168.10.109/todo/result/updateexecute?id=".$data->id."&title=".$data->title."&status=9&day=".$data->day . PHP_EOL;
     
             $slack_push_model->push_msg($msg);
         }
