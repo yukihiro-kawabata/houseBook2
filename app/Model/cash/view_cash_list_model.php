@@ -6,12 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 use  App\Model\cash\cashModel;
 use App\db\cash;
+use App\Model\kamoku\kamoku_model;
 
 class view_cash_list_model extends cashModel
 {
     private static function cashDao() : cash
     {
         return new cash();
+    }
+
+    private static function kamoku_model() : kamoku_model
+    {
+        return new kamoku_model();
     }
 
     private function fetch_pay_off_this_month($yyyymm)
@@ -33,6 +39,7 @@ class view_cash_list_model extends cashModel
             'devit_pay' => $this->card_pay_fee((int)$param['date']), // デビットカードの使用金額
             'detail' => $this->fetch_detail((int)$param['date']), // 明細を取得する
             'pay_off' => $this->fetch_pay_off_this_month($param['date']), // 月末精算対象のサマリーデータ
+            'kamoku_list' =>  self::kamoku_model()->fetch_all_data(), // 科目一覧
         ];
     }
 }

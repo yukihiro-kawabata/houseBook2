@@ -21,6 +21,9 @@ Route::get('/cash/index', 'cash\cashController@indexAction');
 // regist execute
 Route::get('/cash/indexexecute', 'cash\cashController@indexexecute');
 Route::post('/cash/indexexecute', 'cash\cashController@indexexecute');
+// update execute of cash
+Route::get('/cash/updateexecute', 'cash\cashController@updateexecute');
+Route::post('/cash/updateexecute', 'cash\cashController@updateexecute');
 // cash list
 Route::get('/cash/list', 'cash\cashController@listAction');
 // delete of cash list

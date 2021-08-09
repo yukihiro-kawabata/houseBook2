@@ -135,6 +135,47 @@ class cashController extends commonController
         ]);
     }
 
+    /** 更新処理 */
+    public function updateexecute()
+    {
+        $request = Request::all();
+
+        $kamoku_mstDao = new kamoku_mst();
+        $kamoku = $kamoku_mstDao->where('kamoku_id', $request['subject'])->first();
+
+        $cachDao = new cash();
+        $cachDao
+            ->where('id', $request['id'])
+            ->update([
+                'name'      => $request['name'],
+                'price'     => str_replace(',', '', $request['price']),
+                'kamoku_id' => $request['subject'],
+                'tag'       => $kamoku->kamoku,
+                'priceFlg'  => $kamoku->amount_flg,
+                'date'      => $request['date'],
+                'comment'   => $request['comment'],
+            ]);
+
+            // slackに通知
+            $msg  = "データ更新". PHP_EOL ;
+            $msg .= "------------------------------------" . PHP_EOL;
+            $msg .= "対象者：" . $request['name']    . PHP_EOL;
+            $msg .= "金額　：" . $request['price']   . PHP_EOL;
+            $msg .= "科目　；" . $kamoku->kamoku     . PHP_EOL;
+            $msg .= "概要　：" . $request['comment'] . PHP_EOL;
+
+            $this->common_model()->slack_push_msg($msg);
+
+            // デビット使用限度額までの金額を通知する
+            $cashModel = new cashModel();
+            if ($request['name'] === $cashModel::DEVIT_NAME) {
+                $msg1  = "◆デビットの使用限度額まで：". number_format($cashModel->fetch_remain_devit_amount()) . PHP_EOL;
+                $this->common_model()->slack_push_msg($msg1);
+            }
+
+        return redirect($_SERVER['HTTP_REFERER']);
+    }
+
     /*
      * 明細の削除処理
      */ 

@@ -81,10 +81,11 @@
             <tbody>
             <tr>
                 @foreach ($view['detail'] as $detail_num => $detail)
-                <tr id="detail_tr_{{ $detail->id }}">
+                <tr id="detail_tr_{{ $detail->id }}" onclick="editFormShow(this);">
                         <td><span class="circle {{ $detail->name }}"></span>{{ $detail->name }}</td>
                         <td>{{ number_format((int)$detail->price) }}</td>
                         <td>{{ $detail->tag }}</td>
+                        <td class="display_off">{{ $detail->kamoku_id }}</td>
                         <td class="text-center"><span class="circle {{ empty($detail->half_flg_str) ? NULL : 'bg-secondary' }}"></span></td>
                         <td>{{ $detail->comment }}</td>
                         <td>{{ $detail->date }}</td>
@@ -95,6 +96,72 @@
             </tbody>
         </table>
     </div>
+
+    <form method="GET" action="{{ url('/cash/updateexecute') }}" name="editForm"
+         class="bg-white border border-primary display_off" id="editForm">
+        
+            <div class="mb-3">
+                <h3>
+                    データ修正
+                    <span class="float-right pointer"
+                        onclick="document.getElementById('editForm').classList.add('display_off')">&#10006;</span>
+                </h3>
+            </div> 
+            <input type="hidden" name="id" id="id">
+
+            <div class="mb-3">
+                <label for="name" class="form-label">名前</label>
+                <select class="form-control" id="name" name="name">
+                    @foreach($userDatas as $u)
+                        <option value="{{ $u }}">{{ $u }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">金額</label>
+                <input type="text" class="form-control" id="price" name="price">
+            </div>
+            <div class="mb-3">
+                <label for="subject" class="form-label">科目</label>
+                <select class="form-control" id="subject" name="subject">
+                    @foreach($view['kamoku_list'] as $n => $k)
+                        <option value="{{ $k['kamoku_id'] }}">{{ $k['kamoku'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">日付</label>
+                <input type="date" class="form-control" id="date" name="date">
+            </div>
+            <div class="mb-3">
+                <label for="comment" class="form-label">内容</label>
+                <input type="text" class="form-control" id="comment" name="comment">
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-primary float-right" onclick="document.editForm.submit();">更新する</button>
+            </div>
+    </form>
+    
+
+    <script>
+            const editFormShow = (ele) => {
+                const id      = ele.id.replace('detail_tr_', '');
+                const name    = ele.children[0].innerText;
+                const price   = ele.children[1].innerText;
+                const subject = ele.children[3].innerText;
+                const comment = ele.children[5].innerText;
+                const date    = ele.children[6].innerText;
+
+                document.getElementById("id").value      = id;
+                document.getElementById("name").value    = name;
+                document.getElementById("price").value   = price;
+                document.getElementById("subject").value = subject;
+                document.getElementById("comment").value = comment;
+                document.getElementById("date").value    = date;
+
+                document.getElementById('editForm').classList.remove('display_off');
+            }
+    </script>
 
     <hr style="height: 10px;"></hr>
 
@@ -177,7 +244,15 @@
     .display_off {
         display: none;
     }
-    
+    .pointer {
+        cursor: pointer;
+    }
+    #editForm {
+        position: fixed;
+        inset: 0;
+        margin: 0;
+        padding: 15px;
+    }
 </style>
 
 <script type="text/javascript">
